@@ -8,12 +8,15 @@
     "start": "bun run --bun next start",
     "lint": "eslint",
     "postinstall": "bun --bun run prisma generate",
+    "prisma:push": "bun --bun run prisma db push",
     "prisma:generate": "bun --bun run prisma generate",
     "prisma:migrate": "bun --bun run prisma migrate dev",
     "prisma:studio": "bun --bun run prisma studio",
-    "prisma:validate": "bun --bun run prisma validate"
+    "prisma:validate": "bun --bun run prisma validate",
+    "prisma:seed": "bun --bun run prisma db seed"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
