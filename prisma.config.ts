@@ -1,13 +1,13 @@
+// Prisma’s config loader does not read `.env` files; `env()` only sees `process.env`.
+// Run the CLI with Bun so `.env` is loaded (e.g. `bun --bun run prisma …`, `bunx --bun prisma …`).
 import { defineConfig, env } from "prisma/config";
-
-/** Migrate / CLI: prefer direct URL (e.g. Supabase); else fall back to DATABASE_URL. */
-function migrateUrl(): string {
-  return process.env.DIRECT_URL ?? env("DATABASE_URL");
-}
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
+  migrations: {
+    path: "prisma/migrations",
+  },
   datasource: {
-    url: migrateUrl(),
+    url: env("DATABASE_URL"),
   },
 });

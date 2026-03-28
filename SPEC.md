@@ -46,11 +46,17 @@ datasource db {
 
 // -- Auth Tables (managed by Lucia) --
 
+enum Role {
+  CLIENT
+  ADMIN
+}
+
 model User {
   id           String    @id @default(cuid())
   name         String
   email        String    @unique
   passwordHash String    // Hashed with Argon2 via @node-rs/argon2
+  role         Role      @default(CLIENT)
 
   sessions  Session[]
   customers Customer[]

@@ -7,10 +7,11 @@
     "build": "bun run --bun next build",
     "start": "bun run --bun next start",
     "lint": "eslint",
-    "postinstall": "prisma generate",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "postinstall": "bun --bun run prisma generate",
+    "prisma:generate": "bun --bun run prisma generate",
+    "prisma:migrate": "bun --bun run prisma migrate dev",
+    "prisma:studio": "bun --bun run prisma studio",
+    "prisma:validate": "bun --bun run prisma validate"
   },
   "dependencies": {
     "@prisma/client": "^7.6.0",
