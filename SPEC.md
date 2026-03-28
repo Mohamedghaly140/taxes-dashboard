@@ -11,18 +11,18 @@
 
 ## 2. Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 15+ (App Router) |
-| Runtime | Bun |
-| Language | TypeScript |
-| Database | PostgreSQL (Supabase) |
-| ORM | Prisma |
-| Authentication | Lucia |
-| Validation | Zod |
-| UI Components | Shadcn UI (Radix UI) |
-| Styling | Tailwind CSS |
-| Icons | Lucide-react |
+| Layer          | Technology               |
+| -------------- | ------------------------ |
+| Framework      | Next.js 15+ (App Router) |
+| Runtime        | Bun                      |
+| Language       | TypeScript               |
+| Database       | PostgreSQL (Supabase)    |
+| ORM            | Prisma                   |
+| Authentication | Lucia                    |
+| Validation     | Zod                      |
+| UI Components  | Shadcn UI (Radix UI)     |
+| Styling        | Tailwind CSS             |
+| Icons          | Lucide-react             |
 
 ---
 
@@ -51,12 +51,19 @@ enum Role {
   ADMIN
 }
 
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+
 model User {
   id           String    @id @default(cuid())
   name         String
   email        String    @unique
   passwordHash String    // Hashed with Argon2 via @node-rs/argon2
   role         Role      @default(CLIENT)
+  status       Status    @default(ACTIVE)
 
   sessions  Session[]
   customers Customer[]
