@@ -26,26 +26,26 @@ bun run prisma:studio     # Open Prisma Studio GUI
 
 This is a **Next.js App Router** app (Next.js 16, React 19) using **Bun** as the runtime. The project is in an early scaffolding state — the planned structure from `SPEC.md` is not yet implemented.
 
-**Planned source layout** (under `src/`, not yet created):
+**Source layout** (root-level, no `src/` wrapper):
 
 ```
-src/
-├── app/                  # Route segments only — no business logic
-│   ├── (auth)/           # login, register pages
-│   └── (dashboard)/      # protected dashboard routes
-├── components/
-│   ├── ui/               # Shadcn/Radix primitives
-│   ├── customers/        # Customer-specific components
-│   └── auth/             # Auth form components
-├── lib/
-│   ├── auth/
-│   │   ├── lucia.ts      # Lucia instance + Prisma adapter
-│   │   └── session.ts    # validateRequest, createSession, invalidateSession
-│   ├── validations/      # Shared Zod schemas (auth + customer)
-│   └── db.ts             # Prisma client singleton
-└── actions/              # Server Actions — all mutations live here
-    ├── auth.actions.ts
-    └── customer.actions.ts
+app/                      # Next.js App Router — route segments only
+├── (auth)/               # login, register pages
+└── (dashboard)/          # protected dashboard routes
+components/
+├── ui/                   # Shadcn/Radix primitives
+├── customers/            # Customer-specific components
+└── auth/                 # Auth form components
+lib/
+├── auth/
+│   ├── lucia.ts          # Lucia instance + Prisma adapter
+│   └── session.ts        # validateRequest, createSession, invalidateSession
+├── validations/          # Shared Zod schemas (auth + customer)
+└── prisma.ts             # Prisma client singleton
+actions/                  # Server Actions — all mutations live here
+├── auth.actions.ts
+└── customer.actions.ts
+middleware.ts             # Protects /dashboard/:path*
 ```
 
 **Key architectural decisions:**
@@ -53,8 +53,8 @@ src/
 - All mutations use **Server Actions** — no manual `fetch('/api/...')` calls.
 - **Lucia** handles session-based auth; sessions stored in Postgres via Prisma adapter. Password hashing uses `@node-rs/argon2`.
 - **Data isolation:** every Prisma query must filter by `session.user.id` from `validateRequest()`. Customers belong to a single user via `userId` FK.
-- `src/middleware.ts` protects `/dashboard/:path*` by calling `validateRequest` and redirecting unauthenticated users to `/login`.
-- Shared **Zod schemas** in `src/lib/validations/` are used for both client-side form validation (`react-hook-form` + Zod resolver) and server-side action validation.
+- `middleware.ts` protects `/dashboard/:path*` by calling `validateRequest` and redirecting unauthenticated users to `/login`.
+- Shared **Zod schemas** in `lib/validations/` are used for both client-side form validation (`react-hook-form` + Zod resolver) and server-side action validation.
 - UI components come from **Shadcn** (built on Radix UI) with Tailwind CSS v4. Toast notifications use **sonner**.
 
 ## Database

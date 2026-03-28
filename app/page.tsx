@@ -1,42 +1,46 @@
-"use client";
+import { prisma } from "@/lib/prisma";
 
-import { testDatabaseConnection } from "@/src/actions/test.actions";
-import { useState } from "react";
+export default async function Home() {
+  let userCount: number | null = null;
+  let error: string | null = null;
 
-export default function Home() {
-  const [status, setStatus] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  async function handleTest() {
-    setLoading(true);
-    setStatus(null);
-    try {
-      const result = await testDatabaseConnection();
-      console.log("DB connection result:", result);
-      setStatus(`Connected! User count: ${result.userCount}`);
-    } catch (err) {
-      console.error("DB connection failed:", err);
-      setStatus("Connection failed. Check console for details.");
-    } finally {
-      setLoading(false);
-    }
+  try {
+    userCount = await prisma.user.count();
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Connection failed";
   }
+
+  const connected = error === null;
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-zinc-50 dark:bg-zinc-950">
-      <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-        Taxes Dashboard — DB Test
-      </h1>
-      <button
-        onClick={handleTest}
-        disabled={loading}
-        className="rounded-md bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
-      >
-        {loading ? "Testing..." : "Test Database Connection"}
-      </button>
-      {status && (
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">{status}</p>
-      )}
+      <div className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <h1 className="mb-6 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+          Taxes Dashboard
+        </h1>
+
+        <div className="flex items-center gap-3">
+          <span
+            className={`h-2.5 w-2.5 rounded-full ${connected ? "bg-emerald-500" : "bg-red-500"}`}
+          />
+          <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            {connected ? "Database connected" : "Database unreachable"}
+          </span>
+        </div>
+
+        {connected ? (
+          <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
+            Users in database:{" "}
+            <span className="font-semibold text-zinc-900 dark:text-zinc-50">
+              {userCount}
+            </span>
+          </p>
+        ) : (
+          <p className="mt-4 rounded-md bg-red-50 px-3 py-2 text-xs text-red-600 dark:bg-red-950 dark:text-red-400">
+            {error}
+          </p>
+        )}
+      </div>
     </main>
   );
 }
