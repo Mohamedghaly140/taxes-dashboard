@@ -111,7 +111,7 @@ Shared schemas are defined once and used for both client-side form validation an
 ### Auth Schemas
 
 ```typescript
-// src/lib/validations/auth.schema.ts
+// lib/validations/auth.schema.ts
 
 import { z } from "zod";
 
@@ -133,7 +133,7 @@ export type LoginFormValues = z.infer<typeof loginSchema>;
 ### Customer Schema
 
 ```typescript
-// src/lib/validations/customer.schema.ts
+// lib/validations/customer.schema.ts
 
 import { z } from "zod";
 
@@ -160,9 +160,9 @@ Lucia is a session-based auth library that gives full control over the auth flow
 
 **Core setup files:**
 
-- `src/lib/auth/lucia.ts` — initializes the Lucia instance with the Prisma adapter.
-- `src/lib/auth/session.ts` — server-side helpers: `createSession`, `validateRequest`, `invalidateSession`.
-- `src/middleware.ts` — protects `/dashboard/:path*` by calling `validateRequest` and redirecting unauthenticated users to `/login`.
+- `lib/auth/lucia.ts` — initializes the Lucia instance with the Prisma adapter.
+- `lib/auth/session.ts` — server-side helpers: `createSession`, `validateRequest`, `invalidateSession`.
+- `middleware.ts` — protects `/dashboard/:path*` by calling `validateRequest` and redirecting unauthenticated users to `/login`.
 
 **Flow:**
 
@@ -194,7 +194,7 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 ## 6. Project Structure (Clean Architecture)
 
 ```
-src/
+
 ├── app/                        # Next.js App Router (routes only)
 │   ├── (auth)/
 │   │   ├── login/page.tsx
