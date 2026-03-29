@@ -53,7 +53,7 @@ middleware.ts             # Protects /dashboard/:path*
 - All mutations use **Server Actions** — no manual `fetch('/api/...')` calls.
 - **Lucia** handles session-based auth; sessions stored in Postgres via Prisma adapter. Password hashing uses `@node-rs/argon2`.
 - **Data isolation:** every Prisma query must filter by `session.user.id` from `validateRequest()`. Customers belong to a single user via `userId` FK.
-- `middleware.ts` protects `/dashboard/:path*` by calling `validateRequest` and redirecting unauthenticated users to `/login`.
+- `proxy.ts` protects `/dashboard/:path*` by checking the session cookie and redirecting unauthenticated users to `/login`. (Next.js 16 renamed `middleware.ts` → `proxy.ts`; export name changed from `middleware` to `proxy`.)
 - Shared **Zod schemas** in `lib/validations/` are used for both client-side form validation (`react-hook-form` + Zod resolver) and server-side action validation.
 - UI components come from **Shadcn** (built on Radix UI) with Tailwind CSS v4. Toast notifications use **sonner**.
 
