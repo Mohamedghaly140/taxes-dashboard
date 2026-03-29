@@ -13,7 +13,7 @@ datasource db {
 }
 
 enum Role {
-  USER
+  CLIENT
   ADMIN
 }
 
@@ -29,7 +29,7 @@ model User {
   name         String
   email        String @unique
   passwordHash String
-  role         Role   @default(USER)
+  role         Role   @default(CLIENT)
   status       Status @default(ACTIVE)
 
   sessions  Session[]
@@ -54,7 +54,7 @@ model Customer {
   name                  String
   email                 String
   emailPassword         String?
-  username              String  @unique
+  username              String?
   fileNumber            String  @unique
   taxRegistrationNumber String  @unique
   nationalId            String  @unique

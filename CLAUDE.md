@@ -60,3 +60,13 @@ middleware.ts             # Protects /dashboard/:path*
 ## Database
 
 PostgreSQL via Supabase. Requires `DATABASE_URL` env var. Schema is in `prisma/schema.prisma`. The `Session` table is managed entirely by Lucia — do not add application logic to it.
+
+## Prisma v7 — Breaking Changes
+
+This project uses **Prisma v7** which has key differences from v5/v6:
+
+- **`url`/`directUrl` removed from `schema.prisma`** — the `datasource` block has no `url` field. Do not add one.
+- **`prisma.config.ts` owns the connection URL** — `datasource.url` in `prisma.config.ts` is what the CLI uses for migrations. It must point to `DIRECT_URL` (direct TCP to Postgres), not the pooled `DATABASE_URL`.
+- **`directUrl` config option is gone** — it existed in v6.19 and earlier but is fully removed in v7. There is no replacement field; the workaround is to set `datasource.url` to `DIRECT_URL` and let `PrismaClient` in `lib/prisma.ts` use `DATABASE_URL` (pooled) independently via the driver adapter.
+- **Generated client output** — the client is generated to `generated/prisma/` (configured in `schema.prisma` generator block). Import from `@/generated/prisma/client`, not from `@prisma/client`.
+- **`prisma-client` generator provider** — use `provider = "prisma-client"` (not `"prisma-client-js"`) in the generator block.

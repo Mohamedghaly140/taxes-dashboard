@@ -24,7 +24,7 @@ async function main() {
       name: "Alice Example",
       email: "alice@example.com",
       passwordHash,
-      role: Role.USER,
+      role: Role.CLIENT,
       status: Status.ACTIVE,
     },
   });

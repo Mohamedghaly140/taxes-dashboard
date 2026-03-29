@@ -14,6 +14,6 @@ export default defineConfig({
     seed: "bun prisma/seeds.ts",
   },
   datasource: {
-    url: env("DATABASE_URL"),
+    url: env("DIRECT_URL"), // CLI/migrations must use direct TCP connection, not the PgBouncer pooler
   },
 });
