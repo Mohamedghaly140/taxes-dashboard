@@ -11,6 +11,7 @@
     "prisma:push": "bun --bun run prisma db push",
     "prisma:generate": "bun --bun run prisma generate",
     "prisma:migrate": "bun --bun run prisma migrate dev",
+    "prisma:migrate:reset": "bun --bun run prisma migrate reset",
     "prisma:studio": "bun --bun run prisma studio",
     "prisma:validate": "bun --bun run prisma validate",
     "prisma:seed": "bun --bun run prisma db seed"

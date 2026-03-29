@@ -15,9 +15,14 @@ async function hashPassword(plain: string): Promise<string> {
 async function main() {
   const passwordHash = await hashPassword(SEED_PASSWORD);
 
-  await prisma.customer.deleteMany();
-  await prisma.session.deleteMany();
-  await prisma.user.deleteMany();
+  try {
+    await prisma.customer.deleteMany();
+    await prisma.session.deleteMany();
+    await prisma.user.deleteMany();
+  } catch (error) {
+    console.error(error);
+    console.log("Error deleting data, continuing with seed...");
+  }
 
   const alice = await prisma.user.create({
     data: {
