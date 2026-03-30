@@ -57,6 +57,23 @@ middleware.ts             # Protects /dashboard/:path*
 - Shared **Zod schemas** in `lib/validations/` are used for both client-side form validation (`react-hook-form` + Zod resolver) and server-side action validation.
 - UI components come from **Shadcn** (built on Radix UI) with Tailwind CSS v4. Toast notifications use **sonner**.
 
+## Form Pattern (Server Actions + `useActionState`)
+
+All forms use `useActionState` (React 19) wired to the shared `<Form>` component:
+
+1. **Server Action signature:** `(prevState: ActionState, formData: FormData): Promise<ActionState>` — return `fromErrorToActionState` on failure, `toActionState("SUCCESS", ...)` on success (or `redirect()`).
+2. **Client form:**
+   ```tsx
+   const [actionState, formAction, isPending] = useActionState(action, EMPTY_ACTION_STATE);
+   // <Form action={formAction} actionState={actionState}>
+   //   <FormControl name="field" label="..." actionState={actionState} />
+   // </Form>
+   ```
+3. **Field errors** flow through `actionState.fieldErrors` → `FormControl` → `FieldError`.
+4. **Toasts** are handled automatically by `<Form>` via `useActionFeedback` (reacts to `actionState.timestamp` changes).
+5. **Payload restore** — pass `defaultValue={actionState.payload?.get("fieldName") as string}` to re-populate fields on error.
+6. Do **not** use `react-hook-form` or `zodResolver` in forms that use Server Actions — Zod validation happens server-side in the action.
+
 ## Database
 
 PostgreSQL via Supabase. Requires `DATABASE_URL` env var. Schema is in `prisma/schema.prisma`. The `Session` table is managed entirely by Lucia — do not add application logic to it.
