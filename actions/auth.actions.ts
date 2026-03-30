@@ -23,11 +23,7 @@ export async function register(
   formData: FormData
 ): Promise<ActionState> {
   try {
-    const parsed = registerSchema.safeParse({
-      name: formData.get("name"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-    });
+    const parsed = registerSchema.safeParse(Object.fromEntries(formData));
 
     if (!parsed.success) {
       return fromErrorToActionState(parsed.error, formData);
@@ -58,10 +54,7 @@ export async function login(
   formData: FormData
 ): Promise<ActionState> {
   try {
-    const parsed = loginSchema.safeParse({
-      email: formData.get("email"),
-      password: formData.get("password"),
-    });
+    const parsed = loginSchema.safeParse(Object.fromEntries(formData));
 
     if (!parsed.success) {
       return fromErrorToActionState(parsed.error, formData);

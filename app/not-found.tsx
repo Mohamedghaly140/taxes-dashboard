@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { LucideArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -25,7 +25,7 @@ export default function NotFound() {
         {/* Back to Home Button */}
         <Button asChild size='lg' className='mt-8'>
           <Link href='/'>
-            <ArrowLeft className='mr-2 h-4 w-4' />
+            <LucideArrowLeft className='mr-2 h-4 w-4' />
             Back to Home
           </Link>
         </Button>

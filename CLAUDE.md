@@ -56,12 +56,13 @@ middleware.ts             # Protects /dashboard/:path*
 - `proxy.ts` protects `/dashboard/:path*` by checking the session cookie and redirecting unauthenticated users to `/login`. (Next.js 16 renamed `middleware.ts` → `proxy.ts`; export name changed from `middleware` to `proxy`.)
 - Shared **Zod schemas** in `lib/validations/` are used for both client-side form validation (`react-hook-form` + Zod resolver) and server-side action validation.
 - UI components come from **Shadcn** (built on Radix UI) with Tailwind CSS v4. Toast notifications use **sonner**.
+- **Lucide icons** must always be imported with the `Lucide` name prefix (e.g. `LucideLoader2`, `LucideArrowLeft`, `LucideX`). Never use bare names (`Loader2`, `ArrowLeft`) or `Icon`-suffixed names (`Loader2Icon`).
 
 ## Form Pattern (Server Actions + `useActionState`)
 
 All forms use `useActionState` (React 19) wired to the shared `<Form>` component:
 
-1. **Server Action signature:** `(prevState: ActionState, formData: FormData): Promise<ActionState>` — return `fromErrorToActionState` on failure, `toActionState("SUCCESS", ...)` on success (or `redirect()`).
+1. **Server Action signature:** `(prevState: ActionState, formData: FormData): Promise<ActionState>` — return `fromErrorToActionState` on failure, `toActionState("SUCCESS", ...)` on success (or `redirect()`). Parse with `schema.safeParse(Object.fromEntries(formData))`.
 2. **Client form:**
    ```tsx
    const [actionState, formAction, isPending] = useActionState(action, EMPTY_ACTION_STATE);

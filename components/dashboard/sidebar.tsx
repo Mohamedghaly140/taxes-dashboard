@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, Settings, User, LogOut } from "lucide-react";
+import { LucideUsers, LucideSettings, LucideUser, LucideLogOut } from "lucide-react";
 import { useTransition } from "react";
 import { logout } from "@/actions/auth.actions";
 import { Button } from "@/components/ui/button";
@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 import type { User as LuciaUser } from "lucia";
 
 const navItems = [
-  { href: "/dashboard", label: "Customers", icon: Users },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings },
-  { href: "/dashboard/profile", label: "Profile", icon: User },
+  { href: "/dashboard", label: "Customers", icon: LucideUsers },
+  { href: "/dashboard/settings", label: "Settings", icon: LucideSettings },
+  { href: "/dashboard/profile", label: "Profile", icon: LucideUser },
 ];
 
 export function Sidebar({ user }: { user: LuciaUser }) {
@@ -54,7 +54,7 @@ export function Sidebar({ user }: { user: LuciaUser }) {
         onClick={handleLogout}
         disabled={isPending}
       >
-        <LogOut className="size-4 shrink-0" />
+        <LucideLogOut className="size-4 shrink-0" />
         {isPending ? "Signing out…" : "Sign out"}
       </Button>
     </aside>

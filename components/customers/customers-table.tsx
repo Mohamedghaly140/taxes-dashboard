@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { LucidePencil, LucideTrash2, LucidePlus } from "lucide-react";
 import { deleteCustomer } from "@/actions/customer.actions";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -56,7 +56,7 @@ export function CustomersTable({ customers: initial }: { customers: Customer[] }
     <div className="space-y-4">
       <div className="flex justify-end">
         <Button onClick={handleAdd} size="sm">
-          <Plus className="size-4 mr-2" /> Add Customer
+          <LucidePlus className="size-4 mr-2" /> Add Customer
         </Button>
       </div>
 
@@ -90,7 +90,7 @@ export function CustomersTable({ customers: initial }: { customers: Customer[] }
                 <TableCell>
                   <div className="flex items-center gap-1">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(customer)}>
-                      <Pencil className="size-4" />
+                      <LucidePencil className="size-4" />
                     </Button>
                     <Button
                       variant="ghost"
@@ -101,7 +101,7 @@ export function CustomersTable({ customers: initial }: { customers: Customer[] }
                       {deletingId === customer.id ? (
                         <Spinner />
                       ) : (
-                        <Trash2 className="size-4 text-destructive" />
+                        <LucideTrash2 className="size-4 text-destructive" />
                       )}
                     </Button>
                   </div>
