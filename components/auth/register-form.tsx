@@ -27,7 +27,7 @@ export function RegisterForm() {
           name="name"
           type="text"
           placeholder="Your name"
-          defaultValue={actionState.payload?.get("name") as string}
+          defaultValue={actionState.payload?.["name"]}
           actionState={actionState}
         />
         <FormControl
@@ -35,7 +35,7 @@ export function RegisterForm() {
           name="email"
           type="email"
           placeholder="you@example.com"
-          defaultValue={actionState.payload?.get("email") as string}
+          defaultValue={actionState.payload?.["email"]}
           actionState={actionState}
         />
         <FormControl

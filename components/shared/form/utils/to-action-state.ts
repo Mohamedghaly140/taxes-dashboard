@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 export type ActionState = {
   status?: "SUCCESS" | "ERROR";
   message: string;
-  payload?: FormData;
+  payload?: Record<string, string>;
   fieldErrors: Record<string, string[] | undefined>;
   timestamp: number;
   response?: Record<string, string | number | undefined | null>;
@@ -16,6 +16,9 @@ export const EMPTY_ACTION_STATE: ActionState = {
   timestamp: Date.now(),
 };
 
+const toPayload = (formData?: FormData): Record<string, string> | undefined =>
+  formData ? Object.fromEntries(formData) as Record<string, string> : undefined;
+
 export const fromErrorToActionState = (
   error: unknown,
   formData?: FormData,
@@ -26,7 +29,7 @@ export const fromErrorToActionState = (
       status: "ERROR",
       message: "",
       fieldErrors: error.flatten().fieldErrors,
-      payload: formData,
+      payload: toPayload(formData),
       timestamp: Date.now(),
       response,
     };
@@ -36,7 +39,7 @@ export const fromErrorToActionState = (
   //     status: "ERROR",
   //     message: error.response?.data.message,
   //     fieldErrors: {},
-  //     payload: formData,
+  //     payload: toPayload(formData),
   //     timestamp: Date.now(),
   //     response,
   //   };
@@ -46,7 +49,7 @@ export const fromErrorToActionState = (
       status: "ERROR",
       message: error.message,
       fieldErrors: {},
-      payload: formData,
+      payload: toPayload(formData),
       timestamp: Date.now(),
       response,
     };
@@ -70,7 +73,7 @@ export const toActionState = (
     message,
     fieldErrors: {},
     timestamp: Date.now(),
-    payload: formData,
+    payload: toPayload(formData),
     response,
   };
 };

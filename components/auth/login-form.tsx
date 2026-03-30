@@ -27,7 +27,7 @@ export function LoginForm() {
           name="email"
           type="email"
           placeholder="you@example.com"
-          defaultValue={actionState.payload?.get("email") as string}
+          defaultValue={actionState.payload?.["email"]}
           actionState={actionState}
         />
         <FormControl
