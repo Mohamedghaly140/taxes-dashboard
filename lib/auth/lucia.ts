@@ -20,14 +20,17 @@ export const lucia = new Lucia(adapter, {
   }),
 });
 
+interface DatabaseUserAttributes {
+  name: string;
+  email: string;
+  role: Role;
+  status: Status;
+}
+
 declare module "lucia" {
   interface Register {
     Lucia: typeof lucia;
-    DatabaseUserAttributes: {
-      name: string;
-      email: string;
-      role: Role;
-      status: Status;
-    };
+    DatabaseUserAttributes: DatabaseUserAttributes;
   }
 }
+

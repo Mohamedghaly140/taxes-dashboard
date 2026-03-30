@@ -206,6 +206,17 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 │
 ├── components/                 # Reusable UI components
 │   ├── ui/                     # Shadcn primitives
+│   ├── shared/                 # Cross-feature UI (not domain-specific)
+│   │   ├── form/               # Server Action form wrapper + helpers
+│   │   │   ├── form.tsx        # Form shell + toast feedback (see below)
+│   │   │   ├── field-error.tsx # Field-level error display
+│   │   │   ├── hooks/
+│   │   │   │   └── use-action-feedback.ts
+│   │   │   └── utils/
+│   │   │       └── to-action-state.ts  # ActionState, Zod → state helpers
+│   │   ├── form-control/       # Label + control + errors composition
+│   │   ├── redirect-toast/     # Toast after redirect (e.g. cookie flags)
+│   │   └── spinner/            # Loading indicator
 │   ├── customers/              # Customer-specific components
 │   └── auth/                   # Auth form components
 │
@@ -216,12 +227,45 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 │   ├── validations/
 │   │   ├── auth.schema.ts
 │   │   └── customer.schema.ts
-│   └── db.ts                   # Prisma client singleton
+│   └── prisma.ts               # Prisma client singleton
 │
 └── actions/                    # Server Actions (use cases)
     ├── auth.actions.ts
     └── customer.actions.ts
 ```
+
+### 6.1 `components/shared/`
+
+**Purpose:** UI pieces reused across auth, dashboard, and future features. Domain-specific building blocks stay under `components/customers/`, `components/auth/`, etc.; anything that applies to multiple features lives here.
+
+**Contents (current):**
+
+| Path | Role |
+| --- | --- |
+| `form/` | Server Action–oriented forms: shared `Form`, `ActionState` typing, Zod → action state helpers, field errors |
+| `form-control/` | Accessible label + control + optional description/errors |
+| `redirect-toast/` | Client helper to show a toast once after navigation when a server action sets a cookie or search param |
+| `spinner/` | Shared loading UI |
+
+### 6.2 `components/shared/form/form.tsx`
+
+**Role:** Thin wrapper around a native `<form>` whose `action` is a **Server Action** (or a function derived from `useFormState`). It wires **feedback** when the action returns: it subscribes to an `ActionState` object (see `form/utils/to-action-state.ts`) and, when that state **changes** (tracked by `timestamp`), shows **Sonner** toasts for `message` on success or error and calls optional `onSuccess` / `onError` callbacks.
+
+**Typical usage:**
+
+1. **Server Action** returns `ActionState` built with helpers from `to-action-state.ts` (e.g. validation errors → `fieldErrors`, business rules → `message` + `status`).
+2. **Client page** uses React’s `useFormState` (or equivalent) so each submit updates `actionState`.
+3. **Render** `<Form action={…} actionState={actionState}>` and put inputs inside; map `actionState.fieldErrors` to `FieldError` / `form-control` as needed.
+
+**Props:**
+
+| Prop | Purpose |
+| --- | --- |
+| `action` | `(formData: FormData) => void` — bound server action from `useFormState` |
+| `actionState` | Latest `ActionState` from the action (includes `status`, `message`, `fieldErrors`, `timestamp`) |
+| `onSuccess` / `onError` | Optional; runs when feedback fires (e.g. reset form, navigate) — toasts for `message` are already handled inside `Form` |
+
+**Related:** `useActionFeedback` only reacts when `actionState.timestamp` changes, so the initial empty state does not fire success/error handlers on mount.
 
 ---
 
