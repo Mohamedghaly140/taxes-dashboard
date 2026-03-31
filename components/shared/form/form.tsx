@@ -39,7 +39,7 @@ const Form = ({
   return (
     <form
       action={action}
-      className={cn("flex flex-col gap-4 self-center mx-auto", className)}
+      className={cn("flex flex-col gap-4 w-full", className)}
     >
       {children}
     </form>

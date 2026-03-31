@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LucidePencil, LucideTrash2, LucidePlus } from "lucide-react";
 import { deleteCustomer } from "@/actions/customer.actions";
@@ -12,8 +13,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { CustomerModal } from "./customer-modal";
 import type { Customer } from "@/generated/prisma/client";
 
-export function CustomersTable({ customers: initial }: { customers: Customer[] }) {
-  const [customers, setCustomers] = useState(initial);
+export function CustomersTable({ customers }: { customers: Customer[] }) {
+  const router = useRouter();
   const [editTarget, setEditTarget] = useState<Customer | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -36,19 +37,10 @@ export function CustomersTable({ customers: initial }: { customers: Customer[] }
       if (result?.error) {
         toast.error("Failed to delete customer");
       } else {
-        setCustomers((prev) => prev.filter((c) => c.id !== id));
         toast.success("Customer deleted");
+        router.refresh();
       }
       setDeletingId(null);
-    });
-  }
-
-  function handleSaved(customer: Customer) {
-    setCustomers((prev) => {
-      const exists = prev.find((c) => c.id === customer.id);
-      return exists
-        ? prev.map((c) => (c.id === customer.id ? customer : c))
-        : [customer, ...prev];
     });
   }
 
@@ -116,7 +108,6 @@ export function CustomersTable({ customers: initial }: { customers: Customer[] }
         open={modalOpen}
         onOpenChange={setModalOpen}
         customer={editTarget}
-        onSaved={handleSaved}
       />
     </div>
   );
