@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { LucideLoaderCircle } from "lucide-react";
 
 interface SpinnerProps {
