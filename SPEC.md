@@ -297,7 +297,7 @@ Items identified during evaluation. Work through these in order.
 
 - [x] **P5 — TanStack `DataTable`:** Replaced plain `<Table>` with TanStack Table v8. Added `columns.tsx` with sortable Name/Email headers. `CustomersTable` now has column filtering (by name) and client-side sorting via `getSortedRowModel` + `getFilteredRowModel`.
 
-- [ ] **P6 — `deleteCustomer` ActionState:** `deleteCustomer` still returns `{ success, error }` — inconsistent with the rest of the codebase. Update signature to `(prevState: ActionState, formData: FormData) => Promise<ActionState>` and pass the customer `id` via a hidden form input or bind.
+- [x] **P6 — `deleteCustomer` ActionState:** Updated to return `Promise<ActionState>`. Keeps `(id: string)` param (button-triggered, no form). Table now checks `result.status === "ERROR"` and uses `result.message` for toasts.
 
 ### Minor
 

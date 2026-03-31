@@ -103,15 +103,19 @@ export async function updateCustomer(
   return toActionState("SUCCESS", "Customer updated");
 }
 
-export async function deleteCustomer(id: string) {
-  const user = await getAuthenticatedUser();
+export async function deleteCustomer(id: string): Promise<ActionState> {
+  try {
+    const user = await getAuthenticatedUser();
 
-  const existing = await prisma.customer.findUnique({ where: { id } });
-  if (!existing || existing.userId !== user.id) {
-    return { error: { form: ["Customer not found"] } };
+    const existing = await prisma.customer.findUnique({ where: { id } });
+    if (!existing || existing.userId !== user.id) {
+      return toActionState("ERROR", "Customer not found");
+    }
+
+    await prisma.customer.delete({ where: { id } });
+  } catch (error) {
+    return fromErrorToActionState(error);
   }
 
-  await prisma.customer.delete({ where: { id } });
-
-  return { success: true };
+  return toActionState("SUCCESS", "Customer deleted");
 }

@@ -46,10 +46,10 @@ export function CustomersTable({ customers }: { customers: Customer[] }) {
     setDeletingId(id);
     startTransition(async () => {
       const result = await deleteCustomer(id);
-      if (result?.error) {
-        toast.error("Failed to delete customer");
+      if (result.status === "ERROR") {
+        toast.error(result.message || "Failed to delete customer");
       } else {
-        toast.success("Customer deleted");
+        toast.success(result.message);
         router.refresh();
       }
       setDeletingId(null);
