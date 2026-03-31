@@ -6,10 +6,10 @@ import { login } from "@/actions/auth.actions";
 import { EMPTY_ACTION_STATE } from "@/components/shared/form/utils/to-action-state";
 import Form from "@/components/shared/form/form";
 import FormControl from "@/components/shared/form-control";
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/shared/submit-button";
 
 export function LoginForm() {
-  const [actionState, formAction, isPending] = useActionState(
+  const [actionState, formAction] = useActionState(
     login,
     EMPTY_ACTION_STATE
   );
@@ -38,9 +38,7 @@ export function LoginForm() {
           actionState={actionState}
         />
 
-        <Button type="submit" className="w-full" disabled={isPending}>
-          {isPending ? "Signing in…" : "Sign in"}
-        </Button>
+        <SubmitButton label="Sign in" className="w-full" />
       </Form>
 
       <p className="text-center text-sm text-muted-foreground">

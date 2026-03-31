@@ -301,8 +301,8 @@ Items identified during evaluation. Work through these in order.
 
 ### Minor
 
-- [ ] **M1 — `redirect-toast`:** The `components/shared/redirect-toast/` component exists but is never used. Wire it up or remove it.
+- [x] **M1 — `redirect-toast`:** Already wired in `app/template.tsx`. Reads a `toast` cookie on every pathname change and fires a Sonner toast — used for post-redirect feedback from server actions via `setCookieByKey("toast", message)` in `cookies.actions.ts`.
 
-- [ ] **M2 — `submit-button`:** The `components/shared/submit-button/` component exists but every form uses a plain `<Button>` directly. Consolidate or remove.
+- [x] **M2 — `submit-button`:** Now used in all three forms (`login-form`, `register-form`, `customer-form`). Uses `useFormStatus()` internally so `isPending` no longer needs to be threaded down from `useActionState`.
 
 - [ ] **M3 — Leftover action files:** `actions/test.actions.ts` and `actions/cookies.actions.ts` appear to be scaffolding leftovers. Audit and remove if unused.

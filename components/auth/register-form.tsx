@@ -6,10 +6,10 @@ import { register as registerAction } from "@/actions/auth.actions";
 import { EMPTY_ACTION_STATE } from "@/components/shared/form/utils/to-action-state";
 import Form from "@/components/shared/form/form";
 import FormControl from "@/components/shared/form-control";
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/shared/submit-button";
 
 export function RegisterForm() {
-  const [actionState, formAction, isPending] = useActionState(
+  const [actionState, formAction] = useActionState(
     registerAction,
     EMPTY_ACTION_STATE
   );
@@ -46,9 +46,7 @@ export function RegisterForm() {
           actionState={actionState}
         />
 
-        <Button type="submit" className="w-full" disabled={isPending}>
-          {isPending ? "Creating account…" : "Create account"}
-        </Button>
+        <SubmitButton label="Create account" className="w-full" />
       </Form>
 
       <p className="text-center text-sm text-muted-foreground">

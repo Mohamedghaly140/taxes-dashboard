@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import Form from "@/components/shared/form/form";
 import FormControl from "@/components/shared/form-control";
 import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/shared/submit-button";
 import {
   ActionState,
   EMPTY_ACTION_STATE,
@@ -23,7 +24,7 @@ export function CustomerForm({
   onSuccess,
   onCancel,
 }: CustomerFormProps) {
-  const [actionState, formAction, isPending] = useActionState(
+  const [actionState, formAction] = useActionState(
     action,
     EMPTY_ACTION_STATE
   );
@@ -105,9 +106,7 @@ export function CustomerForm({
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Saving…" : customer ? "Save changes" : "Add customer"}
-        </Button>
+        <SubmitButton label={customer ? "Save changes" : "Add customer"} />
       </div>
     </Form>
   );
