@@ -291,9 +291,9 @@ Items identified during evaluation. Work through these in order.
 
 - [x] **P2 — Dashboard `loading.tsx`:** Added `app/(dashboard)/dashboard/loading.tsx` — mirrors page structure (heading + button area + 6-row skeleton table) using the `<Skeleton>` component.
 
-- [ ] **P3 — Settings page:** Sidebar links to `/dashboard/settings` but the page does not exist (hard 404). Add a stub `app/(dashboard)/dashboard/settings/page.tsx`.
+- [x] **P3 — Settings page:** Added stub `app/(dashboard)/dashboard/settings/page.tsx`.
 
-- [ ] **P4 — Profile page:** Sidebar links to `/dashboard/profile` but the page does not exist (hard 404). Add a stub `app/(dashboard)/dashboard/profile/page.tsx`.
+- [x] **P4 — Profile page:** Added `app/(dashboard)/dashboard/profile/page.tsx` — displays authenticated user's name, email, and role.
 
 - [ ] **P5 — TanStack `DataTable`:** Spec requires Shadcn `DataTable` (TanStack Table v8) with column filtering and sorting. Current implementation uses a plain static `<Table>`. Replace `CustomersTable` with a proper `DataTable`.
 
