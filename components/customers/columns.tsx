@@ -66,6 +66,7 @@ export const createColumns = (
 
 import { LucidePencil, LucideTrash2 } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 
 function ActionCell({
   customer,
@@ -83,18 +84,21 @@ function ActionCell({
       <Button variant="ghost" size="icon" onClick={() => onEdit(customer)}>
         <LucidePencil className="size-4" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => onDelete(customer.id)}
-        disabled={isDeleting}
-      >
-        {isDeleting ? (
-          <Spinner />
-        ) : (
-          <LucideTrash2 className="size-4 text-destructive" />
-        )}
-      </Button>
+      <ConfirmDialog
+        title="Delete customer?"
+        description={`"${customer.name}" will be permanently deleted. This action cannot be undone.`}
+        confirmLabel="Delete"
+        onConfirm={() => onDelete(customer.id)}
+        trigger={
+          <Button variant="ghost" size="icon" disabled={isDeleting}>
+            {isDeleting ? (
+              <Spinner />
+            ) : (
+              <LucideTrash2 className="size-4 text-destructive" />
+            )}
+          </Button>
+        }
+      />
     </div>
   );
 }
