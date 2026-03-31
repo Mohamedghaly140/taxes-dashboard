@@ -278,3 +278,31 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 5. **Actions:** implement `customer.actions.ts` for full CRUD logic.
 6. **Views:** build the main Dashboard table and the "Add/Edit Customer" modal.
 7. **Optimization:** add loading skeletons and toast notifications.
+
+---
+
+## 8. Outstanding Fixes & Gaps
+
+Items identified during evaluation. Work through these in order.
+
+### Priority
+
+- [x] **P1 — Middleware (`proxy.ts`):** `proxy.ts` exists, exports `proxy`, matches `/dashboard/:path*`, and checks the `auth_session` cookie at the edge. Layout retains `validateRequest()` as a DB-level second layer (also needed to fetch `user` for the Sidebar). Done.
+
+- [x] **P2 — Dashboard `loading.tsx`:** Added `app/(dashboard)/dashboard/loading.tsx` — mirrors page structure (heading + button area + 6-row skeleton table) using the `<Skeleton>` component.
+
+- [ ] **P3 — Settings page:** Sidebar links to `/dashboard/settings` but the page does not exist (hard 404). Add a stub `app/(dashboard)/dashboard/settings/page.tsx`.
+
+- [ ] **P4 — Profile page:** Sidebar links to `/dashboard/profile` but the page does not exist (hard 404). Add a stub `app/(dashboard)/dashboard/profile/page.tsx`.
+
+- [ ] **P5 — TanStack `DataTable`:** Spec requires Shadcn `DataTable` (TanStack Table v8) with column filtering and sorting. Current implementation uses a plain static `<Table>`. Replace `CustomersTable` with a proper `DataTable`.
+
+- [ ] **P6 — `deleteCustomer` ActionState:** `deleteCustomer` still returns `{ success, error }` — inconsistent with the rest of the codebase. Update signature to `(prevState: ActionState, formData: FormData) => Promise<ActionState>` and pass the customer `id` via a hidden form input or bind.
+
+### Minor
+
+- [ ] **M1 — `redirect-toast`:** The `components/shared/redirect-toast/` component exists but is never used. Wire it up or remove it.
+
+- [ ] **M2 — `submit-button`:** The `components/shared/submit-button/` component exists but every form uses a plain `<Button>` directly. Consolidate or remove.
+
+- [ ] **M3 — Leftover action files:** `actions/test.actions.ts` and `actions/cookies.actions.ts` appear to be scaffolding leftovers. Audit and remove if unused.
