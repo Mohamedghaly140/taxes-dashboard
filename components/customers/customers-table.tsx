@@ -3,18 +3,30 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { LucidePencil, LucideTrash2, LucidePlus } from "lucide-react";
+import {
+  ColumnFiltersState,
+  SortingState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { LucidePlus } from "lucide-react";
 import { deleteCustomer } from "@/actions/customer.actions";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
+import { Input } from "@/components/ui/input";
 import { CustomerModal } from "./customer-modal";
+import { createColumns } from "./columns";
 import type { Customer } from "@/generated/prisma/client";
 
 export function CustomersTable({ customers }: { customers: Customer[] }) {
   const router = useRouter();
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [editTarget, setEditTarget] = useState<Customer | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -44,9 +56,28 @@ export function CustomersTable({ customers }: { customers: Customer[] }) {
     });
   }
 
+  const columns = createColumns(handleEdit, handleDelete, deletingId);
+
+  const table = useReactTable({
+    data: customers,
+    columns,
+    state: { sorting, columnFilters },
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+  });
+
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between">
+        <Input
+          placeholder="Filter by name..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(e) => table.getColumn("name")?.setFilterValue(e.target.value)}
+          className="max-w-xs"
+        />
         <Button onClick={handleAdd} size="sm">
           <LucidePlus className="size-4 mr-2" /> Add Customer
         </Button>
@@ -55,51 +86,36 @@ export function CustomersTable({ customers }: { customers: Customer[] }) {
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>File No.</TableHead>
-              <TableHead>Tax Reg. No.</TableHead>
-              <TableHead>National ID</TableHead>
-              <TableHead className="w-20" />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {customers.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
-                  No customers yet. Add your first one.
-                </TableCell>
-              </TableRow>
-            )}
-            {customers.map((customer) => (
-              <TableRow key={customer.id}>
-                <TableCell className="font-medium">{customer.name}</TableCell>
-                <TableCell>{customer.email}</TableCell>
-                <TableCell>{customer.fileNumber}</TableCell>
-                <TableCell>{customer.taxRegistrationNumber}</TableCell>
-                <TableCell>{customer.nationalId}</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(customer)}>
-                      <LucidePencil className="size-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleDelete(customer.id)}
-                      disabled={deletingId === customer.id}
-                    >
-                      {deletingId === customer.id ? (
-                        <Spinner />
-                      ) : (
-                        <LucideTrash2 className="size-4 text-destructive" />
-                      )}
-                    </Button>
-                  </div>
-                </TableCell>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center text-muted-foreground py-8">
+                  No customers found.
+                </TableCell>
+              </TableRow>
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

@@ -295,7 +295,7 @@ Items identified during evaluation. Work through these in order.
 
 - [x] **P4 — Profile page:** Added `app/(dashboard)/dashboard/profile/page.tsx` — displays authenticated user's name, email, and role.
 
-- [ ] **P5 — TanStack `DataTable`:** Spec requires Shadcn `DataTable` (TanStack Table v8) with column filtering and sorting. Current implementation uses a plain static `<Table>`. Replace `CustomersTable` with a proper `DataTable`.
+- [x] **P5 — TanStack `DataTable`:** Replaced plain `<Table>` with TanStack Table v8. Added `columns.tsx` with sortable Name/Email headers. `CustomersTable` now has column filtering (by name) and client-side sorting via `getSortedRowModel` + `getFilteredRowModel`.
 
 - [ ] **P6 — `deleteCustomer` ActionState:** `deleteCustomer` still returns `{ success, error }` — inconsistent with the rest of the codebase. Update signature to `(prevState: ActionState, formData: FormData) => Promise<ActionState>` and pass the customer `id` via a hidden form input or bind.
 
