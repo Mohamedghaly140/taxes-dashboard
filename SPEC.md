@@ -305,4 +305,4 @@ Items identified during evaluation. Work through these in order.
 
 - [x] **M2 — `submit-button`:** Now used in all three forms (`login-form`, `register-form`, `customer-form`). Uses `useFormStatus()` internally so `isPending` no longer needs to be threaded down from `useActionState`.
 
-- [ ] **M3 — Leftover action files:** `actions/test.actions.ts` and `actions/cookies.actions.ts` appear to be scaffolding leftovers. Audit and remove if unused.
+- [x] **M3 — Leftover action files:** `test.actions.ts` deleted (unused). `cookies.actions.ts` kept — imported by `redirect-toast`.
