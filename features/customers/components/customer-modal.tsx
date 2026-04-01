@@ -1,15 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { createCustomer, updateCustomer } from "../actions";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { CustomerForm } from "./customer-form";
 import type { Customer } from "@/generated/prisma/client";
+import { createCustomer, updateCustomer } from "../actions";
+import { CustomerForm } from "./customer-form";
 
 interface CustomerModalProps {
   open: boolean;
@@ -22,10 +21,7 @@ export function CustomerModal({
   onOpenChange,
   customer,
 }: CustomerModalProps) {
-  const router = useRouter();
-
   function handleSuccess() {
-    router.refresh();
     onOpenChange(false);
   }
 

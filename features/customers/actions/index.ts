@@ -116,6 +116,8 @@ export async function updateCustomer(
     if (duplicate) return toActionState("ERROR", DUPLICATE_MSG, formData);
 
     await prisma.customer.update({ where: { id }, data });
+    revalidatePath("/dashboard/customers");
+    revalidatePath(`/dashboard/customers/${id}`);
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }

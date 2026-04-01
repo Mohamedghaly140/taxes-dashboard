@@ -15,6 +15,7 @@ import {
 import type { Customer } from "@/generated/prisma/client";
 import { CopyButton } from "./copy-button";
 import { DeleteCustomerButton } from "./delete-customer-button";
+import { EditCustomerButton } from "./edit-customer-button";
 
 function getInitials(name: string) {
   return name
@@ -112,7 +113,10 @@ export function CustomerDetail({ customer }: { customer: Customer }) {
             <span className="font-mono text-xs opacity-60">{customer.id}</span>
           </p>
         </div>
-        <DeleteCustomerButton id={customer.id} name={customer.name} />
+        <div className="flex items-center gap-2 shrink-0">
+          <EditCustomerButton customer={customer} />
+          <DeleteCustomerButton id={customer.id} name={customer.name} />
+        </div>
       </div>
 
       {/* Info grid */}
