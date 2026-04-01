@@ -195,63 +195,160 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 
 ---
 
-## 6. Project Structure (Clean Architecture)
+## 6. Project Structure (Feature-Based Architecture)
 
 ```
-
-├── app/                        # Next.js App Router (routes only)
+├── app/                              # Next.js App Router — routes only, no logic
 │   ├── (auth)/
-│   │   ├── login/page.tsx
-│   │   └── register/page.tsx
+│   │   ├── login/page.tsx            # → renders <LoginForm /> from @/features/auth
+│   │   └── register/page.tsx         # → renders <RegisterForm /> from @/features/auth
 │   └── (dashboard)/
 │       └── dashboard/
-│           ├── layout.tsx
-│           └── page.tsx
+│           ├── layout.tsx            # → renders <Sidebar /> from @/features/dashboard
+│           ├── page.tsx              # → renders <DashboardOverview /> from @/features/dashboard
+│           ├── loading.tsx           # skeleton matching overview layout
+│           ├── customers/
+│           │   ├── page.tsx          # → renders <CustomersView searchParams={…} /> from @/features/customers
+│           │   └── loading.tsx       # skeleton matching customers table
+│           ├── profile/
+│           │   ├── page.tsx
+│           │   └── loading.tsx
+│           └── settings/
+│               ├── page.tsx
+│               └── loading.tsx
 │
-├── components/                 # Reusable UI components
-│   ├── ui/                     # Shadcn primitives
-│   ├── shared/                 # Cross-feature UI (not domain-specific)
-│   │   ├── form/               # Server Action form wrapper + helpers
-│   │   │   ├── form.tsx        # Form shell + toast feedback (see below)
-│   │   │   ├── field-error.tsx # Field-level error display
-│   │   │   ├── hooks/
-│   │   │   │   └── use-action-feedback.ts
-│   │   │   └── utils/
-│   │   │       └── to-action-state.ts  # ActionState, Zod → state helpers
-│   │   ├── form-control/       # Label + control + errors composition
-│   │   ├── redirect-toast/     # Toast after redirect (e.g. cookie flags)
-│   │   └── spinner/            # Loading indicator
-│   ├── customers/              # Customer-specific components
-│   └── auth/                   # Auth form components
+├── features/                         # Feature modules — all domain logic lives here
+│   ├── auth/
+│   │   ├── actions/
+│   │   │   └── index.ts              # register, login, logout (Server Actions)
+│   │   ├── components/
+│   │   │   ├── login-form.tsx
+│   │   │   └── register-form.tsx
+│   │   └── index.ts                  # barrel: export { LoginForm, RegisterForm }
+│   ├── customers/
+│   │   ├── actions/
+│   │   │   └── index.ts              # getCustomers, createCustomer, updateCustomer, deleteCustomer
+│   │   ├── components/
+│   │   │   ├── columns.tsx
+│   │   │   ├── customer-form.tsx
+│   │   │   ├── customer-modal.tsx
+│   │   │   ├── customers-table.tsx
+│   │   │   └── customers-view.tsx    # smart server component — fetches + renders
+│   │   └── index.ts                  # barrel: export { CustomersView }
+│   └── dashboard/
+│       ├── actions/
+│       │   └── index.ts              # getDashboardStats
+│       ├── components/
+│       │   ├── overview.tsx          # smart server component — fetches + renders stat cards
+│       │   └── sidebar.tsx
+│       └── index.ts                  # barrel: export { DashboardOverview, Sidebar }
+│
+├── components/                       # Shared, non-domain UI
+│   ├── ui/                           # Shadcn primitives (never edit manually)
+│   └── shared/                       # Cross-feature building blocks
+│       ├── form/                     # Server Action form wrapper + helpers
+│       │   ├── form.tsx
+│       │   ├── field-error.tsx
+│       │   ├── hooks/use-action-feedback.ts
+│       │   └── utils/to-action-state.ts
+│       ├── form-control/
+│       ├── confirm-dialog/
+│       ├── redirect-toast/
+│       ├── submit-button/
+│       └── spinner/
 │
 ├── lib/
 │   ├── auth/
-│   │   ├── lucia.ts            # Lucia instance + adapter
-│   │   └── session.ts          # validateRequest, createSession, etc.
+│   │   ├── lucia.ts                  # Lucia instance + adapter
+│   │   └── session.ts                # validateRequest, createSession, invalidateSession
 │   ├── validations/
 │   │   ├── auth.schema.ts
 │   │   └── customer.schema.ts
-│   └── prisma.ts               # Prisma client singleton
+│   └── prisma.ts                     # Prisma client singleton
 │
-└── actions/                    # Server Actions (use cases)
-    ├── auth.actions.ts
-    └── customer.actions.ts
+├── actions/                          # Global shared Server Actions (cross-feature)
+│   └── cookies.actions.ts            # setCookieByKey, getCookieByKey, deleteCookieByKey
+│
+└── nuqs/
+    └── search-params.ts              # Shared URL search param parsers + cache
 ```
 
-### 6.1 `components/shared/`
+---
 
-**Purpose:** UI pieces reused across auth, dashboard, and future features. Domain-specific building blocks stay under `components/customers/`, `components/auth/`, etc.; anything that applies to multiple features lives here.
+### 6.1 Feature Module Convention
 
-**Contents (current):**
+Every feature follows the same shape. When adding a new feature (e.g. `invoices`):
+
+```
+features/invoices/
+├── actions/
+│   └── index.ts        # "use server" — all Server Actions for this feature
+├── components/
+│   ├── invoices-view.tsx   # smart server component: fetches data + renders
+│   └── *.tsx               # sub-components used internally
+└── index.ts            # barrel — only export what pages need
+```
+
+**Rules:**
+- `actions/index.ts` must have `"use server"` at the top.
+- Internal components import actions via relative path (`../actions`), never via `@/features/…/actions`.
+- The page file imports **only** from the feature's `index.ts` barrel (`@/features/invoices`).
+- `components/shared/` and `components/ui/` are imported via `@/components/…` from anywhere.
+- `lib/` and `nuqs/` are imported via `@/lib/…` and `@/nuqs/…` from anywhere.
+- Feature actions **must not** import from another feature's actions — share logic via `lib/` instead.
+- Cross-feature Server Actions (e.g. cookie helpers) live in `actions/` at the root — **not** inside any feature folder. Import them via `@/actions/…`. Add new files there when an action is genuinely shared across two or more features.
+- `lib/validations/` holds the Zod schema for each feature — add `invoices.schema.ts` there.
+
+**Smart server component pattern (`*-view.tsx`):**
+
+The view component is an `async` Server Component that owns data fetching for its route. The page just passes `searchParams` (or nothing) through:
+
+```tsx
+// app/(dashboard)/dashboard/invoices/page.tsx
+import { InvoicesView } from "@/features/invoices";
+
+export default function InvoicesPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  return <InvoicesView searchParams={searchParams} />;
+}
+```
+
+```tsx
+// features/invoices/components/invoices-view.tsx
+import { searchParamsCache } from "@/nuqs/search-params";
+import { getInvoices } from "../actions";
+import { InvoicesTable } from "./invoices-table";
+
+export async function InvoicesView({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  const { search, page, limit } = await searchParamsCache.parse(searchParams);
+  const { invoices, total, pageCount } = await getInvoices({ search, page, limit });
+  return <InvoicesTable invoices={invoices} total={total} pageCount={pageCount} />;
+}
+```
+
+---
+
+### 6.2 `components/shared/`
+
+**Purpose:** UI building blocks reused across multiple features. Nothing domain-specific lives here.
 
 | Path | Role |
 | --- | --- |
-| `form/` | Server Action–oriented forms: shared `Form`, `ActionState` typing, Zod → action state helpers, field errors |
-| `form-control/` | Accessible label + control + optional description/errors |
-| `redirect-toast/` | Client helper to show a toast once after navigation when a server action sets a cookie or search param |
-| `spinner/` | Shared loading UI |
+| `form/` | Server Action–oriented form shell, `ActionState` typing, Zod → state helpers, field errors |
+| `form-control/` | Accessible label + input + error composition |
+| `confirm-dialog/` | Reusable destructive-action confirmation modal |
+| `redirect-toast/` | Shows a Sonner toast once after redirect (reads a cookie set by server action) |
+| `submit-button/` | Button that reads `useFormStatus()` internally for pending state |
+| `spinner/` | Shared loading indicator |
 
-### 6.2 `components/shared/form/form.tsx`
+### 6.3 `components/shared/form/form.tsx`
 
 **Role:** Thin wrapper around a native `<form>` whose `action` is a **Server Action** (or a function derived from `useFormState`). It wires **feedback** when the action returns: it subscribes to an `ActionState` object (see `form/utils/to-action-state.ts`) and, when that state **changes** (tracked by `timestamp`), shows **Sonner** toasts for `message` on success or error and calls optional `onSuccess` / `onError` callbacks.
 
