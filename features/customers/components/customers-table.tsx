@@ -18,6 +18,13 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CustomerModal } from "./customer-modal";
 import { createColumns } from "./columns";
 import { searchParser, paginationParser } from "@/nuqs/search-params";
@@ -139,26 +146,44 @@ export function CustomersTable({ customers, pageCount, total }: Props) {
         <span>
           {total === 0 ? "No results" : `${start}–${end} of ${total}`}
         </span>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            disabled={page <= 1}
-            onClick={() => setParams({ page: page - 1 })}
-          >
-            <LucideChevronLeft className="size-4" />
-          </Button>
-          <span className="text-sm">
-            {page} / {pageCount || 1}
-          </span>
-          <Button
-            variant="outline"
-            size="icon"
-            disabled={page >= pageCount}
-            onClick={() => setParams({ page: page + 1 })}
-          >
-            <LucideChevronRight className="size-4" />
-          </Button>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-sm">Rows</span>
+            <Select
+              value={String(limit)}
+              onValueChange={(val) => setParams({ limit: Number(val), page: 1 })}
+            >
+              <SelectTrigger size="sm" className="w-16">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {[5, 10, 15, 20, 25].map((n) => (
+                  <SelectItem key={n} value={String(n)}>{n}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              disabled={page <= 1}
+              onClick={() => setParams({ page: page - 1 })}
+            >
+              <LucideChevronLeft className="size-4" />
+            </Button>
+            <span className="text-sm">
+              {page} / {pageCount || 1}
+            </span>
+            <Button
+              variant="outline"
+              size="icon"
+              disabled={page >= pageCount}
+              onClick={() => setParams({ page: page + 1 })}
+            >
+              <LucideChevronRight className="size-4" />
+            </Button>
+          </div>
         </div>
       </div>
 

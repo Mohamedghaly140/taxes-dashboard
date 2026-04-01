@@ -275,7 +275,33 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 
 ---
 
-### 6.1 Feature Module Convention
+### 6.1 UI Component Policy
+
+**All UI components must come from Shadcn UI (`components/ui/`).** Never build a native HTML element (select, dialog, checkbox, etc.) when a Shadcn equivalent exists.
+
+- Install missing components with `npx shadcn@latest add <component>` — this generates the file in `components/ui/`.
+- Import exclusively from `@/components/ui/<component>` — never from `radix-ui` or other primitives directly.
+- Do not modify generated Shadcn files unless the change is intentional and project-wide.
+- For one-off layout or utility needs (spacing, flex, grid) use Tailwind classes directly — no wrapper component needed.
+
+**Currently installed Shadcn components:**
+
+| Component | Path |
+| --- | --- |
+| Alert Dialog | `components/ui/alert-dialog.tsx` |
+| Button | `components/ui/button.tsx` |
+| Dialog | `components/ui/dialog.tsx` |
+| Input | `components/ui/input.tsx` |
+| Label | `components/ui/label.tsx` |
+| Select | `components/ui/select.tsx` |
+| Skeleton | `components/ui/skeleton.tsx` |
+| Sonner (Toaster) | `components/ui/sonner.tsx` |
+| Spinner | `components/ui/spinner.tsx` |
+| Table | `components/ui/table.tsx` |
+
+---
+
+### 6.2 Feature Module Convention
 
 Every feature follows the same shape. When adding a new feature (e.g. `invoices`):
 
@@ -335,7 +361,7 @@ export async function InvoicesView({
 
 ---
 
-### 6.2 `components/shared/`
+### 6.3 `components/shared/`
 
 **Purpose:** UI building blocks reused across multiple features. Nothing domain-specific lives here.
 
@@ -348,7 +374,7 @@ export async function InvoicesView({
 | `submit-button/` | Button that reads `useFormStatus()` internally for pending state |
 | `spinner/` | Shared loading indicator |
 
-### 6.3 `components/shared/form/form.tsx`
+### 6.4 `components/shared/form/form.tsx`
 
 **Role:** Thin wrapper around a native `<form>` whose `action` is a **Server Action** (or a function derived from `useFormState`). It wires **feedback** when the action returns: it subscribes to an `ActionState` object (see `form/utils/to-action-state.ts`) and, when that state **changes** (tracked by `timestamp`), shows **Sonner** toasts for `message` on success or error and calls optional `onSuccess` / `onError` callbacks.
 
