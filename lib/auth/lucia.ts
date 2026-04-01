@@ -5,6 +5,7 @@ import type { Role, Status } from "@/generated/prisma/enums";
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
+
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
     expires: false,
