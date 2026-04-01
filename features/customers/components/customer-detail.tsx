@@ -4,6 +4,7 @@ import {
   LucideUser,
   LucideMail,
   LucideKeyRound,
+  LucideLock,
   LucideAtSign,
   LucideFileText,
   LucideReceipt,
@@ -127,6 +128,11 @@ export function CustomerDetail({ customer }: { customer: Customer }) {
             icon={<LucideKeyRound className="size-4" />}
             label="Email Password"
             value={customer.emailPassword}
+          />
+          <FieldRow
+            icon={<LucideLock className="size-4" />}
+            label="Portal Password"
+            value={customer.portalPassword}
           />
           <FieldRow
             icon={<LucideAtSign className="size-4" />}

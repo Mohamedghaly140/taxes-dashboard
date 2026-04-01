@@ -5,6 +5,7 @@ export const customerSchema = z.object({
   email: z.string().email("Invalid email address"),
   emailPassword: z.string().optional(),
   username: z.string().optional(),
+  portalPassword: z.string().optional(),
   fileNumber: z.string().min(1, "File number is required"),
   taxRegistrationNumber: z.string().length(9, "Must be 9 digits"),
   nationalId: z.string().length(14, "Must be 14 digits"),

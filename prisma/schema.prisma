@@ -57,6 +57,7 @@ model Customer {
   email                 String
   emailPassword         String?
   username              String?
+  portalPassword        String?
   fileNumber            String  @unique
   taxRegistrationNumber String  @unique
   nationalId            String  @unique

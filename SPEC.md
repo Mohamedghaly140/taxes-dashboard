@@ -92,6 +92,7 @@ model Customer {
   email                 String
   emailPassword         String? // Credentials for the customer's email account
   username              String? // Tax portal username
+  portalPassword        String? // Tax portal password
   fileNumber            String  @unique
   taxRegistrationNumber String  @unique
   nationalId            String  @unique
@@ -146,6 +147,7 @@ export const customerSchema = z.object({
   email: z.string().email("Invalid email address"),
   emailPassword: z.string().optional(),
   username: z.string().min(3, "Username is required"),
+  portalPassword: z.string().optional(),
   fileNumber: z.string().min(1, "File number is required"),
   taxRegistrationNumber: z.string().length(9, "Must be 9 digits"),
   nationalId: z.string().length(14, "Must be 14 digits"),

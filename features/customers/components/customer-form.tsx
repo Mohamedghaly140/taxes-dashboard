@@ -74,6 +74,17 @@ export function CustomerForm({
         actionState={actionState}
       />
       <FormControl
+        label="Portal Password"
+        name="portalPassword"
+        type="password"
+        placeholder="Optional"
+        defaultValue={
+          actionState.payload?.["portalPassword"] ??
+          (customer?.portalPassword ?? undefined)
+        }
+        actionState={actionState}
+      />
+      <FormControl
         label="File Number"
         name="fileNumber"
         placeholder="FN-2024-001"
