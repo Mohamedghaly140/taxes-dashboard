@@ -75,7 +75,10 @@ export function CustomersTable({ customers, pageCount, total }: CustomersTablePr
         onAdd={() => { setEditTarget(null); setModalOpen(true); }}
       />
 
-      <CustomersDataTable table={table} />
+      <CustomersDataTable
+        table={table}
+        onRowClick={(id) => router.push(`/dashboard/customers/${id}`)}
+      />
 
       <CustomersPagination
         page={page}

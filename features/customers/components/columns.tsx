@@ -80,7 +80,7 @@ function ActionCell({
   onDelete: (id: string) => void;
 }) {
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
       <Button variant="ghost" size="icon" onClick={() => onEdit(customer)}>
         <LucidePencil className="size-4" />
       </Button>

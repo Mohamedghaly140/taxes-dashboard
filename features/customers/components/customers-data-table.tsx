@@ -13,9 +13,10 @@ import type { Customer } from "@/generated/prisma/client";
 
 type CustomersDataTableProps = {
   table: TanstackTable<Customer>;
+  onRowClick?: (id: string) => void;
 };
 
-export function CustomersDataTable({ table }: CustomersDataTableProps) {
+export function CustomersDataTable({ table, onRowClick }: CustomersDataTableProps) {
   const colSpan = table.getVisibleLeafColumns().length;
 
   return (
@@ -43,7 +44,11 @@ export function CustomersDataTable({ table }: CustomersDataTableProps) {
             </TableRow>
           ) : (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow
+                key={row.id}
+                onClick={() => onRowClick?.(row.original.id)}
+                className={onRowClick ? "cursor-pointer" : undefined}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

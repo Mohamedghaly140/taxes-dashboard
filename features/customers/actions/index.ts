@@ -122,6 +122,13 @@ export async function updateCustomer(
   return toActionState("SUCCESS", "Customer updated");
 }
 
+export async function getCustomer(id: string) {
+  const user = await getAuthenticatedUser();
+  const customer = await prisma.customer.findUnique({ where: { id } });
+  if (!customer || customer.userId !== user.id) return null;
+  return customer;
+}
+
 export async function deleteCustomer(id: string): Promise<ActionState> {
   try {
     const user = await getAuthenticatedUser();
