@@ -77,6 +77,7 @@ export function CustomersTable({ customers, pageCount, total }: CustomersTablePr
 
       <CustomersDataTable
         table={table}
+        search={search}
         onRowClick={(id) => router.push(`/dashboard/customers/${id}`)}
       />
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { flexRender, Table as TanstackTable } from "@tanstack/react-table";
+import { LucideUsers, LucideSearchX } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -13,10 +14,33 @@ import type { Customer } from "@/generated/prisma/client";
 
 type CustomersDataTableProps = {
   table: TanstackTable<Customer>;
+  search: string;
   onRowClick?: (id: string) => void;
 };
 
-export function CustomersDataTable({ table, onRowClick }: CustomersDataTableProps) {
+function EmptyState({ search }: { search: string }) {
+  const hasSearch = search.trim().length > 0;
+
+  return (
+    <div className="flex flex-col items-center justify-center gap-2 py-16 text-center">
+      {hasSearch ? (
+        <LucideSearchX className="size-8 text-muted-foreground/50" />
+      ) : (
+        <LucideUsers className="size-8 text-muted-foreground/50" />
+      )}
+      <p className="text-sm font-medium text-muted-foreground">
+        {hasSearch ? `No results for "${search}"` : "No customers yet"}
+      </p>
+      <p className="text-xs text-muted-foreground/60">
+        {hasSearch
+          ? "Try a different name or clear the search."
+          : "Add your first customer to get started."}
+      </p>
+    </div>
+  );
+}
+
+export function CustomersDataTable({ table, search, onRowClick }: CustomersDataTableProps) {
   const colSpan = table.getVisibleLeafColumns().length;
 
   return (
@@ -37,9 +61,9 @@ export function CustomersDataTable({ table, onRowClick }: CustomersDataTableProp
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={colSpan} className="text-center text-muted-foreground py-8">
-                No customers found.
+            <TableRow className="hover:bg-transparent">
+              <TableCell colSpan={colSpan} className="p-0">
+                <EmptyState search={search} />
               </TableCell>
             </TableRow>
           ) : (
