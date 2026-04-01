@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { validateRequest } from "@/lib/auth/session";
 import { customerSchema } from "@/lib/validations/customer.schema";
@@ -139,6 +140,7 @@ export async function deleteCustomer(id: string): Promise<ActionState> {
     }
 
     await prisma.customer.delete({ where: { id } });
+    revalidatePath("/dashboard/customers");
   } catch (error) {
     return fromErrorToActionState(error);
   }

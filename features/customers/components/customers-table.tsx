@@ -25,7 +25,11 @@ type CustomersTableProps = {
   total: number;
 };
 
-export function CustomersTable({ customers, pageCount, total }: CustomersTableProps) {
+export function CustomersTable({
+  customers,
+  pageCount,
+  total,
+}: CustomersTableProps) {
   const router = useRouter();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [editTarget, setEditTarget] = useState<Customer | null>(null);
@@ -35,7 +39,7 @@ export function CustomersTable({ customers, pageCount, total }: CustomersTablePr
 
   const [{ search, page, limit }, setParams] = useQueryStates(
     { search: searchParser, ...paginationParser },
-    { shallow: false }
+    { shallow: false },
   );
 
   function handleDelete(id: string) {
@@ -46,14 +50,16 @@ export function CustomersTable({ customers, pageCount, total }: CustomersTablePr
         toast.error(result.message || "Failed to delete customer");
       } else {
         toast.success(result.message);
-        router.refresh();
       }
       setDeletingId(null);
     });
   }
 
   const columns = createColumns(
-    (customer) => { setEditTarget(customer); setModalOpen(true); },
+    customer => {
+      setEditTarget(customer);
+      setModalOpen(true);
+    },
     handleDelete,
     deletingId,
   );
@@ -71,14 +77,17 @@ export function CustomersTable({ customers, pageCount, total }: CustomersTablePr
     <div className="space-y-4">
       <CustomersToolbar
         search={search}
-        onSearchChange={(value) => setParams({ search: value, page: 1 })}
-        onAdd={() => { setEditTarget(null); setModalOpen(true); }}
+        onSearchChange={value => setParams({ search: value, page: 1 })}
+        onAdd={() => {
+          setEditTarget(null);
+          setModalOpen(true);
+        }}
       />
 
       <CustomersDataTable
         table={table}
         search={search}
-        onRowClick={(id) => router.push(`/dashboard/customers/${id}`)}
+        onRowClick={id => router.push(`/dashboard/customers/${id}`)}
       />
 
       <CustomersPagination
@@ -86,8 +95,8 @@ export function CustomersTable({ customers, pageCount, total }: CustomersTablePr
         pageCount={pageCount}
         limit={limit}
         total={total}
-        onPageChange={(p) => setParams({ page: p })}
-        onLimitChange={(l) => setParams({ limit: l, page: 1 })}
+        onPageChange={p => setParams({ page: p })}
+        onLimitChange={l => setParams({ limit: l, page: 1 })}
       />
 
       <CustomerModal

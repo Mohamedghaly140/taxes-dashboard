@@ -14,11 +14,12 @@ import {
 } from "lucide-react";
 import type { Customer } from "@/generated/prisma/client";
 import { CopyButton } from "./copy-button";
+import { DeleteCustomerButton } from "./delete-customer-button";
 
 function getInitials(name: string) {
   return name
     .split(" ")
-    .map((w) => w[0])
+    .map(w => w[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
@@ -53,7 +54,9 @@ function FieldRow({ icon, label, value, mono }: FieldRowProps) {
           {isEmpty ? (
             <p className="text-sm text-muted-foreground/50">—</p>
           ) : (
-            <p className={`text-sm font-medium truncate ${mono ? "font-mono tracking-tight" : ""}`}>
+            <p
+              className={`text-sm font-medium truncate ${mono ? "font-mono tracking-tight" : ""}`}
+            >
               {value}
             </p>
           )}
@@ -101,7 +104,7 @@ export function CustomerDetail({ customer }: { customer: Customer }) {
         <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
           <span className="text-xl font-bold text-primary">{initials}</span>
         </div>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-semibold truncate">{customer.name}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
             Added {formatShortDate(customer.createdAt)}
@@ -109,6 +112,7 @@ export function CustomerDetail({ customer }: { customer: Customer }) {
             <span className="font-mono text-xs opacity-60">{customer.id}</span>
           </p>
         </div>
+        <DeleteCustomerButton id={customer.id} name={customer.name} />
       </div>
 
       {/* Info grid */}
@@ -120,6 +124,16 @@ export function CustomerDetail({ customer }: { customer: Customer }) {
             value={customer.name}
           />
           <FieldRow
+            icon={<LucideAtSign className="size-4" />}
+            label="Username"
+            value={customer.username}
+          />
+          <FieldRow
+            icon={<LucideLock className="size-4" />}
+            label="Portal Password"
+            value={customer.portalPassword}
+          />
+          <FieldRow
             icon={<LucideMail className="size-4" />}
             label="Email Address"
             value={customer.email}
@@ -128,16 +142,6 @@ export function CustomerDetail({ customer }: { customer: Customer }) {
             icon={<LucideKeyRound className="size-4" />}
             label="Email Password"
             value={customer.emailPassword}
-          />
-          <FieldRow
-            icon={<LucideLock className="size-4" />}
-            label="Portal Password"
-            value={customer.portalPassword}
-          />
-          <FieldRow
-            icon={<LucideAtSign className="size-4" />}
-            label="Username"
-            value={customer.username}
           />
         </SectionCard>
 
@@ -175,14 +179,20 @@ export function CustomerDetail({ customer }: { customer: Customer }) {
             <LucideCalendarPlus className="size-4 text-muted-foreground shrink-0" />
             <div>
               <p className="text-xs text-muted-foreground mb-0.5">Created</p>
-              <p className="text-sm font-medium">{formatDate(customer.createdAt)}</p>
+              <p className="text-sm font-medium">
+                {formatDate(customer.createdAt)}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-3 px-5 py-4">
             <LucideCalendarClock className="size-4 text-muted-foreground shrink-0" />
             <div>
-              <p className="text-xs text-muted-foreground mb-0.5">Last Updated</p>
-              <p className="text-sm font-medium">{formatDate(customer.updatedAt)}</p>
+              <p className="text-xs text-muted-foreground mb-0.5">
+                Last Updated
+              </p>
+              <p className="text-sm font-medium">
+                {formatDate(customer.updatedAt)}
+              </p>
             </div>
           </div>
         </div>
