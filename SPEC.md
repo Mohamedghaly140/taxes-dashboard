@@ -13,7 +13,7 @@
 
 | Layer          | Technology               |
 | -------------- | ------------------------ |
-| Framework      | Next.js 15+ (App Router) |
+| Framework      | Next.js 16 (App Router)  |
 | Runtime        | Bun                      |
 | Language       | TypeScript               |
 | Database       | PostgreSQL (Supabase)    |
@@ -36,12 +36,14 @@ Lucia requires two dedicated tables: `User` and `Session`. The `Session` table i
 // prisma/schema.prisma
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // No url field — Prisma v7 reads the connection URL from prisma.config.ts,
+  // not from schema.prisma. Set datasource.url there to DIRECT_URL.
 }
 
 // -- Auth Tables (managed by Lucia) --
@@ -78,6 +80,8 @@ model Session {
   expiresAt DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 // -- Application Tables --
