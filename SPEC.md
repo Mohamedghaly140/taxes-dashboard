@@ -301,7 +301,33 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 
 ---
 
-### 6.2 Feature Module Convention
+### 6.2 Component Design Principles (SOLID)
+
+We apply SOLID principles at the component level. The most impactful rules in practice:
+
+**Single Responsibility** — every component does one thing. If a component renders a form AND handles pagination AND manages a modal, split it. Good signals that a split is needed: the file exceeds ~80 lines, or the component name needs "and" to describe it.
+
+**Example — customers table split:**
+
+| File | Responsibility |
+| --- | --- |
+| `customers-table.tsx` | Orchestrator: owns state, wires sub-components |
+| `customers-toolbar.tsx` | Search input + Add button |
+| `customers-data-table.tsx` | TanStack table rendering (header + body + empty state) |
+| `customers-pagination.tsx` | Rows-per-page select + prev/next controls + result count |
+
+**Rules to follow when building components:**
+
+- **One concern per file.** Data fetching, rendering, and user interactions are separate concerns — don't mix them in a single component unless the component is explicitly an orchestrator.
+- **Orchestrators are allowed.** A parent component that owns state and passes props/callbacks to focused children is fine — that is composition, not a violation.
+- **Props over internal coupling.** Sub-components receive plain props and callbacks; they never import sibling state or call actions directly unless they own that responsibility (e.g. a delete button component that owns the delete action).
+- **Name components by what they do.** `CustomersPagination`, `CustomersToolbar`, `CustomersDataTable` — not `CustomersBottom`, `CustomersTop`.
+- **Props type naming:** always name the props type `<ComponentName>Props` — e.g. `CustomersTableProps`, `CustomersPaginationProps`. Never use a generic name like `Props` or `TableProps`. This makes the type instantly identifiable when reading imports or error messages.
+- **Keep files under ~80 lines where practical.** Longer files are a signal to extract a sub-component.
+
+---
+
+### 6.3 Feature Module Convention
 
 Every feature follows the same shape. When adding a new feature (e.g. `invoices`):
 
@@ -361,7 +387,7 @@ export async function InvoicesView({
 
 ---
 
-### 6.3 `components/shared/`
+### 6.4 `components/shared/`
 
 **Purpose:** UI building blocks reused across multiple features. Nothing domain-specific lives here.
 
@@ -374,7 +400,7 @@ export async function InvoicesView({
 | `submit-button/` | Button that reads `useFormStatus()` internally for pending state |
 | `spinner/` | Shared loading indicator |
 
-### 6.4 `components/shared/form/form.tsx`
+### 6.5 `components/shared/form/form.tsx`
 
 **Role:** Thin wrapper around a native `<form>` whose `action` is a **Server Action** (or a function derived from `useFormState`). It wires **feedback** when the action returns: it subscribes to an `ActionState` object (see `form/utils/to-action-state.ts`) and, when that state **changes** (tracked by `timestamp`), shows **Sonner** toasts for `message` on success or error and calls optional `onSuccess` / `onError` callbacks.
 
