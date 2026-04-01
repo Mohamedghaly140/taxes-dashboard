@@ -3,16 +3,15 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useQueryStates } from "nuqs";
 import {
-  ColumnFiltersState,
   SortingState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { LucidePlus } from "lucide-react";
+import { LucideChevronLeft, LucideChevronRight, LucidePlus } from "lucide-react";
 import { deleteCustomer } from "@/actions/customer.actions";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -21,16 +20,31 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CustomerModal } from "./customer-modal";
 import { createColumns } from "./columns";
+import { searchParser, paginationParser } from "@/nuqs/search-params";
 import type { Customer } from "@/generated/prisma/client";
 
-export function CustomersTable({ customers }: { customers: Customer[] }) {
+type Props = {
+  customers: Customer[];
+  pageCount: number;
+  total: number;
+};
+
+export function CustomersTable({ customers, pageCount, total }: Props) {
   const router = useRouter();
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [editTarget, setEditTarget] = useState<Customer | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
+
+  const [{ search, page, limit }, setParams] = useQueryStates(
+    { search: searchParser, ...paginationParser },
+    { shallow: false }
+  );
+
+  function handleSearchChange(value: string) {
+    setParams({ search: value, page: 1 });
+  }
 
   function handleAdd() {
     setEditTarget(null);
@@ -61,21 +75,22 @@ export function CustomersTable({ customers }: { customers: Customer[] }) {
   const table = useReactTable({
     data: customers,
     columns,
-    state: { sorting, columnFilters },
+    state: { sorting },
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
   });
+
+  const start = total === 0 ? 0 : (page - 1) * limit + 1;
+  const end = Math.min(page * limit, total);
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Input
           placeholder="Filter by name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(e) => table.getColumn("name")?.setFilterValue(e.target.value)}
+          value={search}
+          onChange={(e) => handleSearchChange(e.target.value)}
           className="max-w-xs"
         />
         <Button onClick={handleAdd} size="sm">
@@ -118,6 +133,33 @@ export function CustomersTable({ customers }: { customers: Customer[] }) {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      <div className="flex items-center justify-between text-sm text-muted-foreground">
+        <span>
+          {total === 0 ? "No results" : `${start}–${end} of ${total}`}
+        </span>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            disabled={page <= 1}
+            onClick={() => setParams({ page: page - 1 })}
+          >
+            <LucideChevronLeft className="size-4" />
+          </Button>
+          <span className="text-sm">
+            {page} / {pageCount || 1}
+          </span>
+          <Button
+            variant="outline"
+            size="icon"
+            disabled={page >= pageCount}
+            onClick={() => setParams({ page: page + 1 })}
+          >
+            <LucideChevronRight className="size-4" />
+          </Button>
+        </div>
       </div>
 
       <CustomerModal

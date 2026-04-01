@@ -66,6 +66,54 @@ async function main() {
         userId: alice.id,
       },
       {
+        name: "Pyramid Consulting",
+        email: "info@pyramid.example",
+        emailPassword: "portal-secret-4",
+        username: "pyramid_consulting",
+        fileNumber: "FN-2024-004",
+        taxRegistrationNumber: "TRN-EG-1000004",
+        nationalId: "29001010002345",
+        userId: alice.id,
+      },
+      {
+        name: "Cairo Logistics",
+        email: "ops@cairo-logi.example",
+        username: "cairo_logistics",
+        fileNumber: "FN-2024-005",
+        taxRegistrationNumber: "TRN-EG-1000005",
+        nationalId: "29001010003456",
+        userId: alice.id,
+      },
+      {
+        name: "Sphinx Imports",
+        email: "trade@sphinx.example",
+        emailPassword: "portal-secret-6",
+        username: "sphinx_imports",
+        fileNumber: "FN-2024-006",
+        taxRegistrationNumber: "TRN-EG-1000006",
+        nationalId: "29001010004567",
+        userId: alice.id,
+      },
+      {
+        name: "Alexandria Exports",
+        email: "export@alexa.example",
+        username: "alex_exports",
+        fileNumber: "FN-2024-007",
+        taxRegistrationNumber: "TRN-EG-1000007",
+        nationalId: "29001010006789",
+        userId: alice.id,
+      },
+      {
+        name: "Luxor Finance",
+        email: "accounts@luxor.example",
+        emailPassword: "portal-secret-8",
+        username: "luxor_finance",
+        fileNumber: "FN-2024-008",
+        taxRegistrationNumber: "TRN-EG-1000008",
+        nationalId: "29001010007890",
+        userId: alice.id,
+      },
+      {
         name: "Delta Services",
         email: "accounts@delta.example",
         emailPassword: "portal-secret-3",
@@ -78,7 +126,7 @@ async function main() {
     ],
   });
 
-  console.log("Seed OK: 2 users, 3 customers (password for both users: %s)", SEED_PASSWORD);
+  console.log("Seed OK: 2 users, 8 customers (7 for Alice, 1 for Bob) — password: %s", SEED_PASSWORD);
 }
 
 main()
