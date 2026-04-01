@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { createCustomer, updateCustomer } from "@/actions/customer.actions";
+import { createCustomer, updateCustomer } from "../actions";
 import {
   Dialog,
   DialogContent,

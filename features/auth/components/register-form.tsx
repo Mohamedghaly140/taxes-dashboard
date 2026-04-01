@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
-import { register as registerAction } from "@/actions/auth.actions";
+import { register as registerAction } from "../actions";
 import { EMPTY_ACTION_STATE } from "@/components/shared/form/utils/to-action-state";
 import Form from "@/components/shared/form/form";
 import FormControl from "@/components/shared/form-control";

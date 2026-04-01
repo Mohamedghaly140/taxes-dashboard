@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LucideLayoutDashboard, LucideUsers, LucideSettings, LucideUser, LucideLogOut } from "lucide-react";
 import { useTransition } from "react";
-import { logout } from "@/actions/auth.actions";
+import { logout } from "@/features/auth/actions";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { User as LuciaUser } from "lucia";

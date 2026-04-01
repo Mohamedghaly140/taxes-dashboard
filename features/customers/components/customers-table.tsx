@@ -12,7 +12,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { LucideChevronLeft, LucideChevronRight, LucidePlus } from "lucide-react";
-import { deleteCustomer } from "@/actions/customer.actions";
+import { deleteCustomer } from "../actions";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";

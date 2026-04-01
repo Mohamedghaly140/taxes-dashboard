@@ -1,6 +1,6 @@
 import { validateRequest } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { Sidebar } from "@/features/dashboard";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user } = await validateRequest();
