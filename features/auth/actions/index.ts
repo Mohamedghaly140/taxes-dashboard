@@ -72,6 +72,14 @@ export async function login(
       return toActionState("ERROR", "Invalid email or password", formData);
     }
 
+    if (user.status === "INACTIVE") {
+      return toActionState(
+        "ERROR",
+        "Your account is inactive. Please contact support for assistance.",
+        formData
+      );
+    }
+
     await createSession(user.id);
   } catch (error) {
     return fromErrorToActionState(error, formData);
