@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LucideUsers, LucideSettings, LucideUser, LucideLogOut } from "lucide-react";
+import { LucideLayoutDashboard, LucideUsers, LucideSettings, LucideUser, LucideLogOut } from "lucide-react";
 import { useTransition } from "react";
 import { logout } from "@/actions/auth.actions";
 import { Button } from "@/components/ui/button";
@@ -10,9 +10,10 @@ import { cn } from "@/lib/utils";
 import type { User as LuciaUser } from "lucia";
 
 const navItems = [
-  { href: "/dashboard", label: "Customers", icon: LucideUsers },
-  { href: "/dashboard/settings", label: "Settings", icon: LucideSettings },
-  { href: "/dashboard/profile", label: "Profile", icon: LucideUser },
+  { href: "/dashboard",           label: "Overview",   icon: LucideLayoutDashboard },
+  { href: "/dashboard/customers", label: "Customers",  icon: LucideUsers },
+  { href: "/dashboard/settings",  label: "Settings",   icon: LucideSettings },
+  { href: "/dashboard/profile",   label: "Profile",    icon: LucideUser },
 ];
 
 export function Sidebar({ user }: { user: LuciaUser }) {
