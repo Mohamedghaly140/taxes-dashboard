@@ -57,31 +57,23 @@ export function CustomerForm({
         label="Email Password"
         name="emailPassword"
         type="password"
-        placeholder="Optional"
-        defaultValue={
-          actionState.payload?.["emailPassword"] ??
-          (customer?.emailPassword ?? undefined)
-        }
+        placeholder="Email password"
+        defaultValue={actionState.payload?.["emailPassword"] ?? customer?.emailPassword}
         actionState={actionState}
       />
       <FormControl
         label="Portal Username"
         name="username"
-        placeholder="Optional"
-        defaultValue={
-          actionState.payload?.["username"] ?? (customer?.username ?? undefined)
-        }
+        placeholder="Portal username"
+        defaultValue={actionState.payload?.["username"] ?? customer?.username}
         actionState={actionState}
       />
       <FormControl
         label="Portal Password"
         name="portalPassword"
         type="password"
-        placeholder="Optional"
-        defaultValue={
-          actionState.payload?.["portalPassword"] ??
-          (customer?.portalPassword ?? undefined)
-        }
+        placeholder="Portal password"
+        defaultValue={actionState.payload?.["portalPassword"] ?? customer?.portalPassword}
         actionState={actionState}
       />
       <FormControl

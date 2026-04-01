@@ -55,9 +55,9 @@ model Customer {
   id                    String  @id @default(cuid())
   name                  String
   email                 String
-  emailPassword         String?
-  username              String?
-  portalPassword        String?
+  emailPassword         String
+  username              String
+  portalPassword        String
   fileNumber            String  @unique
   taxRegistrationNumber String  @unique
   nationalId            String  @unique
