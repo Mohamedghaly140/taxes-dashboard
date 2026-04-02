@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 import { validateRequest } from "@/lib/auth/session";
+import { LandingPage } from "@/features/landing";
 
 export default async function Home() {
   const { user } = await validateRequest();
-  redirect(user ? "/dashboard" : "/login");
+  if (user) redirect("/dashboard");
+  return <LandingPage />;
 }
