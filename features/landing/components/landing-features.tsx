@@ -40,20 +40,19 @@ export function LandingFeatures() {
     <section aria-labelledby="features-heading" className="py-28">
       <div className="max-w-6xl mx-auto px-6">
         <header className="mb-16">
-          <p
-            className="text-[11px] uppercase tracking-[0.14em] font-medium mb-4"
-            style={{ color: "#b8972a" }}
-          >
+          <p className="text-[11px] uppercase tracking-[0.14em] font-medium mb-4 text-[#b8972a]">
             Why TaxDash
           </p>
           <h2
             id="features-heading"
-            className="text-[clamp(1.75rem,4vw,2.5rem)] leading-tight tracking-[-0.02em]"
+            className="text-[clamp(1.75rem,4vw,2.5rem)] leading-tight tracking-[-0.02em] text-[#1a1918] dark:text-[#eeeae3]"
             style={{ fontFamily: "var(--font-display)", fontWeight: 400 }}
           >
             Everything you need,
             <br />
-            <span style={{ color: "#5a5752" }}>nothing you don&apos;t.</span>
+            <span className="text-[#5a5752]">
+              nothing you don&apos;t.
+            </span>
           </h2>
         </header>
 
@@ -61,32 +60,18 @@ export function LandingFeatures() {
           {features.map(({ Icon, title, desc }) => (
             <li
               key={title}
-              className="card-hover rounded-xl p-6"
-              style={{
-                border: "1px solid rgba(255,255,255,0.05)",
-                background: "#0c0c0c",
-              }}
+              className="card-hover rounded-xl p-6 border border-black/6 bg-[#ebe8e0] dark:border-white/5 dark:bg-[#0c0c0c]"
             >
               <div
                 aria-hidden="true"
-                className="w-10 h-10 rounded-lg flex items-center justify-center mb-5"
-                style={{
-                  background: "rgba(184,151,42,0.08)",
-                  border: "1px solid rgba(184,151,42,0.12)",
-                }}
+                className="w-10 h-10 rounded-lg flex items-center justify-center mb-5 border border-[#b8972a]/25 bg-[#b8972a]/12 dark:border-[#b8972a]/12 dark:bg-[#b8972a]/8"
               >
-                <Icon className="w-5 h-5" style={{ color: "#b8972a" }} />
+                <Icon className="w-5 h-5 text-[#b8972a]" />
               </div>
-              <h3
-                className="font-medium text-[13px] mb-2.5"
-                style={{ color: "#d4cfc7" }}
-              >
+              <h3 className="font-medium text-[13px] mb-2.5 text-[#2e2d2a] dark:text-[#d4cfc7]">
                 {title}
               </h3>
-              <p
-                className="text-[13px] leading-relaxed"
-                style={{ color: "#4a4845" }}
-              >
+              <p className="text-[13px] leading-relaxed text-[#5c5955] dark:text-[#4a4845]">
                 {desc}
               </p>
             </li>

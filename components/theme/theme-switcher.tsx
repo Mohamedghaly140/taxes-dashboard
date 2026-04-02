@@ -1,17 +1,25 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { LucideMoon, LucideSun } from "lucide-react";
 import { useTheme } from "next-themes";
 
-const ThemeSwitcher = () => {
-  const { theme, setTheme } = useTheme();
+type ThemeSwitcherProps = {
+  className?: string;
+};
+
+const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
+  const { resolvedTheme, setTheme } = useTheme();
 
   return (
     <Button
       size="icon"
       variant="outline"
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      className={cn(className)}
+      onClick={() =>
+        setTheme(resolvedTheme === "dark" ? "light" : "dark")
+      }
     >
       <div className="relative w-4 h-4">
         <LucideSun className="absolute w-4 h-4 transition-all dark:-rotate-90 dark:scale-0" />
