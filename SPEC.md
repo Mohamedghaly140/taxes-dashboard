@@ -484,6 +484,8 @@ Items identified during evaluation. Work through these in order.
 
 - [x] **P4 — Profile page:** Added `app/(dashboard)/dashboard/profile/page.tsx` — displays authenticated user's name, email, and role.
 
+- [x] **P8 — Profile edit:** Users can update their own name, email, and password from `/dashboard/profile`. Added `updateProfileSchema` in `lib/validations/user.schema.ts`, `updateProfile` Server Action in `features/users/actions/index.ts` (email-uniqueness check, optional Argon2 password rehash), and `features/users/components/profile-form.tsx` using the standard `Form`/`FormControl`/`SubmitButton` pattern. Status remains read-only.
+
 - [x] **P5 — TanStack `DataTable`:** Replaced plain `<Table>` with TanStack Table v8. Added `columns.tsx` with sortable Name/Email headers. `CustomersTable` now has column filtering (by name) and client-side sorting via `getSortedRowModel` + `getFilteredRowModel`.
 
 - [x] **P6 — `deleteCustomer` ActionState:** Updated to return `Promise<ActionState>`. Keeps `(id: string)` param (button-triggered, no form). Table now checks `result.status === "ERROR"` and uses `result.message` for toasts.
