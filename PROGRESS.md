@@ -36,16 +36,16 @@
 
 ### Architecture
 - [x] **Data-fetch functions marked as Server Actions** — `getCustomers`, `getCustomer`, `getDashboardStats` live in `"use server"` files making them POST-only endpoints; data fetching should use plain async functions (`features/customers/actions/index.ts`, `features/dashboard/actions/index.ts`)
-- [ ] **`createColumns` not memoized** — recreated on every render, causing `useReactTable` to re-initialize unnecessarily (`features/customers/components/customers-table.tsx:58–65`)
+- [x] **`createColumns` not memoized** — recreated on every render, causing `useReactTable` to re-initialize unnecessarily (`features/customers/components/customers-table.tsx:58–65`)
 - [ ] **Query logging unconditional** — `log: ["query"]` in `PrismaClient` runs in production; floods logs and may expose data (`lib/prisma.ts:17`)
 - [ ] **Sidebar active-link too strict** — `pathname === href` exact match means nested routes (e.g. `/dashboard/customers/abc`) don't highlight the parent nav item (`features/dashboard/components/sidebar.tsx:42`)
 - [ ] **Redundant `/api/customers` REST route** — dead endpoint alongside the Server Actions that serve the same data (`app/api/customers/route.ts`)
 
 ### Minor
-- [ ] **`useActionFeedback` — `options` in dep array** — object created inline each render causes the effect to run every render (timestamp guard prevents double-firing but it's wasteful) (`components/shared/form/hooks/use-action-feedback.ts:30`)
-- [ ] **`Label` missing `htmlFor`** — clicking the label doesn't focus the input; accessibility issue (`components/shared/form-control/index.tsx:28`)
+- [x] **`useActionFeedback` — `options` in dep array** — object created inline each render causes the effect to run every render (timestamp guard prevents double-firing but it's wasteful) (`components/shared/form/hooks/use-action-feedback.ts:30`)
+- [x] **`Label` missing `htmlFor`** — clicking the label doesn't focus the input; accessibility issue (`components/shared/form-control/index.tsx:28`)
 - [ ] **`getInitials` crashes on empty word segments** — `name.split(" ").map(w => w[0])` returns `undefined` for consecutive spaces (`features/customers/components/customer-detail.tsx:21–26`)
-- [ ] **Unused dependencies** — `react-hook-form` and `@hookform/resolvers` are installed but never used (`package.json`)
+- [x] **Unused dependencies** — `react-hook-form` and `@hookform/resolvers` are installed but never used (`package.json`)
 
 ---
 

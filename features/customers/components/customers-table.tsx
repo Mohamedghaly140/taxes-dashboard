@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useQueryStates } from "nuqs";
@@ -55,13 +55,16 @@ export function CustomersTable({
     });
   }
 
-  const columns = createColumns(
-    customer => {
-      setEditTarget(customer);
-      setModalOpen(true);
-    },
-    handleDelete,
-    deletingId,
+  const columns = useMemo(
+    () => createColumns(
+      customer => {
+        setEditTarget(customer);
+        setModalOpen(true);
+      },
+      handleDelete,
+      deletingId,
+    ),
+    [deletingId],
   );
 
   const table = useReactTable({

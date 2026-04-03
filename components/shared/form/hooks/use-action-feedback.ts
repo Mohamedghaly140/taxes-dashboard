@@ -27,5 +27,6 @@ export const useActionFeedback = (
     }
 
     prevTimestamp.current = actionState.timestamp;
-  }, [actionState, options]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actionState]);
 };
