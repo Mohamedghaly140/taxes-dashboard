@@ -35,7 +35,6 @@ export async function createSession(userId: string) {
   const session = await lucia.createSession(userId, {});
   const cookie = lucia.createSessionCookie(session.id);
   const cookieStore = await cookies();
-  console.log("createSession", cookie.name, cookie.value, cookie.attributes);
   cookieStore.set(cookie.name, cookie.value, cookie.attributes);
   return session;
 }

@@ -24,10 +24,10 @@
 - [x] **Cross-user duplicate check** — `createCustomer` and `updateCustomer` check `fileNumber` / `taxRegistrationNumber` / `nationalId` uniqueness across all users, not just the current user's customers (`features/customers/actions/index.ts:62–114`)
 - [x] **Missing `revalidatePath` in `createCustomer`** — table cache not invalidated after creation; new customer only appears after hard refresh (`features/customers/actions/index.ts:74–79`)
 - [x] **`updateCustomer` — unsafe `id` extraction** — `formData.get("id") as string` runs before auth and casts `null` to the string `"null"`, causing a silent "not found" error on missing hidden field (`features/customers/actions/index.ts:86`)
-- [ ] **Seed data fails form validation** — `taxRegistrationNumber` in seeds is 14 chars (e.g. `TRN-EG-1000001`); schema requires exactly 9. Seeded customers cannot be saved via the edit form (`prisma/seeds.ts` vs `lib/validations/customer.schema.ts:10`)
+- [x] **Seed data fails form validation** — `taxRegistrationNumber` in seeds is 14 chars (e.g. `TRN-EG-1000001`); schema requires exactly 9. Seeded customers cannot be saved via the edit form (`prisma/seeds.ts` vs `lib/validations/customer.schema.ts:10`)
 
 ### Security
-- [ ] **Session token logged to console** — `console.log` in `createSession` prints the raw cookie value; will leak tokens in production logs (`lib/auth/session.ts:38`)
+- [x] **Session token logged to console** — `console.log` in `createSession` prints the raw cookie value; will leak tokens in production logs (`lib/auth/session.ts:38`)
 - [ ] **Arbitrary cookie write via Server Action** — `setCookieByKey(name, value)` accepts any cookie name from the client; a caller could overwrite the session cookie (`actions/cookies.actions.ts:5–8`)
 
 ### Bugs
