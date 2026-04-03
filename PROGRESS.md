@@ -39,12 +39,12 @@
 - [x] **`createColumns` not memoized** — recreated on every render, causing `useReactTable` to re-initialize unnecessarily (`features/customers/components/customers-table.tsx:58–65`)
 - [x] **Query logging unconditional** — `log: ["query"]` in `PrismaClient` runs in production; floods logs and may expose data (`lib/prisma.ts:17`)
 - [x] **Sidebar active-link too strict** — `pathname === href` exact match means nested routes (e.g. `/dashboard/customers/abc`) don't highlight the parent nav item (`features/dashboard/components/sidebar.tsx:42`)
-- [ ] **Redundant `/api/customers` REST route** — dead endpoint alongside the Server Actions that serve the same data (`app/api/customers/route.ts`)
+- [x] **Redundant `/api/customers` REST route** — dead endpoint alongside the Server Actions that serve the same data (`app/api/customers/route.ts`)
 
 ### Minor
 - [x] **`useActionFeedback` — `options` in dep array** — object created inline each render causes the effect to run every render (timestamp guard prevents double-firing but it's wasteful) (`components/shared/form/hooks/use-action-feedback.ts:30`)
 - [x] **`Label` missing `htmlFor`** — clicking the label doesn't focus the input; accessibility issue (`components/shared/form-control/index.tsx:28`)
-- [ ] **`getInitials` crashes on empty word segments** — `name.split(" ").map(w => w[0])` returns `undefined` for consecutive spaces (`features/customers/components/customer-detail.tsx:21–26`)
+- [x] **`getInitials` crashes on empty word segments** — `name.split(" ").map(w => w[0])` returns `undefined` for consecutive spaces (`features/customers/components/customer-detail.tsx:21–26`)
 - [x] **Unused dependencies** — `react-hook-form` and `@hookform/resolvers` are installed but never used (`package.json`)
 
 ---

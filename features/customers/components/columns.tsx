@@ -1,8 +1,10 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { LucideArrowUpDown } from "lucide-react";
+import { LucideArrowUpDown, LucidePencil, LucideTrash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import type { Customer } from "@/generated/prisma/client";
 
 export const createColumns = (
@@ -63,10 +65,6 @@ export const createColumns = (
     },
   },
 ];
-
-import { LucidePencil, LucideTrash2 } from "lucide-react";
-import { Spinner } from "@/components/ui/spinner";
-import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 
 function ActionCell({
   customer,
