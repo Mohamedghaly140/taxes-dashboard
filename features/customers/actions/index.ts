@@ -10,6 +10,7 @@ import {
   fromErrorToActionState,
   toActionState,
 } from "@/components/shared/form/utils/to-action-state";
+import { Prisma } from "@/generated/prisma/client";
 
 async function getAuthenticatedUser() {
   const { user } = await validateRequest();
@@ -61,6 +62,7 @@ export async function createCustomer(
 
     const duplicate = await prisma.customer.findFirst({
       where: {
+        userId: user.id,
         OR: [
           { fileNumber: data.fileNumber },
           { taxRegistrationNumber: data.taxRegistrationNumber },
@@ -72,7 +74,11 @@ export async function createCustomer(
     if (duplicate) return toActionState("ERROR", DUPLICATE_MSG, formData);
 
     await prisma.customer.create({ data: { ...data, userId: user.id } });
+    revalidatePath("/dashboard/customers");
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return toActionState("ERROR", DUPLICATE_MSG, formData);
+    }
     return fromErrorToActionState(error, formData);
   }
 
@@ -100,15 +106,12 @@ export async function updateCustomer(
 
     const duplicate = await prisma.customer.findFirst({
       where: {
-        AND: [
-          { id: { not: id } },
-          {
-            OR: [
-              { fileNumber: data.fileNumber },
-              { taxRegistrationNumber: data.taxRegistrationNumber },
-              { nationalId: data.nationalId },
-            ],
-          },
+        userId: user.id,
+        id: { not: id },
+        OR: [
+          { fileNumber: data.fileNumber },
+          { taxRegistrationNumber: data.taxRegistrationNumber },
+          { nationalId: data.nationalId },
         ],
       },
     });
@@ -119,6 +122,9 @@ export async function updateCustomer(
     revalidatePath("/dashboard/customers");
     revalidatePath(`/dashboard/customers/${id}`);
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return toActionState("ERROR", DUPLICATE_MSG, formData);
+    }
     return fromErrorToActionState(error, formData);
   }
 
