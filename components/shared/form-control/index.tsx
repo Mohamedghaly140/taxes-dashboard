@@ -25,8 +25,8 @@ const FormControl = ({
 
   return (
     <div className="flex flex-col gap-y-2">
-      <Label>{label}</Label>
-      <Input name={name} type={type} {...restProps} />
+      <Label htmlFor={name}>{label}</Label>
+      <Input id={name} name={name} type={type} {...restProps} />
       {error && <p className="text-red-500">{error}</p>}
       {actionState && <FieldError name={name} actionState={actionState} />}
     </div>
