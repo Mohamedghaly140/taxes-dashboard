@@ -6,13 +6,11 @@ const ROWS = 5;
 export default function UsersLoading() {
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Skeleton className="h-8 w-24" />
-        <Skeleton className="h-9 w-28" />
-      </div>
+      <Skeleton className="h-8 w-20" />
 
       <div className="flex items-center justify-between">
         <Skeleton className="h-9 w-64" />
+        <Skeleton className="h-9 w-28" />
       </div>
 
       <div className="rounded-md border">
