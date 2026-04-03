@@ -4,11 +4,11 @@ export default function ProfileLoading() {
   return (
     <div className="space-y-6 max-w-md">
       <Skeleton className="h-8 w-24" />
+      {/* ProfileForm */}
       <div className="space-y-4">
-        {/* Name, Email, Password fields */}
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="space-y-1">
-            <Skeleton className="h-3 w-24" />
+          <div key={i} className="space-y-2">
+            <Skeleton className="h-4 w-32" />
             <Skeleton className="h-9 w-full" />
           </div>
         ))}
