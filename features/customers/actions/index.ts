@@ -89,10 +89,13 @@ export async function updateCustomer(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
-  const id = formData.get("id") as string;
-
   try {
     const user = await getAuthenticatedUser();
+
+    const id = formData.get("id");
+    if (!id || typeof id !== "string") {
+      return toActionState("ERROR", "Customer not found");
+    }
 
     const existing = await prisma.customer.findUnique({ where: { id } });
     if (!existing || existing.userId !== user.id) {
