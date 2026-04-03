@@ -45,7 +45,7 @@ const SubmitButton = ({
         className,
         "pointer-events-auto",
         "disabled:cursor-not-allowed",
-        { pending: "cursor-wait" },
+        { "cursor-wait": pending },
       )}
     >
       {isLoading && <LucideLoader2 className="w-4 h-4 animate-spin" />}

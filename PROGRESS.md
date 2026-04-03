@@ -31,8 +31,8 @@
 - [x] **Arbitrary cookie write via Server Action** — `setCookieByKey(name, value)` accepts any cookie name from the client; a caller could overwrite the session cookie (`actions/cookies.actions.ts:5–8`)
 
 ### Bugs
-- [ ] **`cursor-wait` class never applied** — `clsx({ pending: "cursor-wait" })` adds the class `"pending"` (always truthy string key), not `cursor-wait` (`components/shared/submit-button/index.tsx:48`)
-- [ ] **`deleteCookieByKey` not awaited** — silent failure; toast cookie may persist and re-appear on next navigation (`components/shared/redirect-toast/index.tsx:16–17`)
+- [x] **`cursor-wait` class never applied** — `clsx({ pending: "cursor-wait" })` adds the class `"pending"` (always truthy string key), not `cursor-wait` (`components/shared/submit-button/index.tsx:48`)
+- [x] **`deleteCookieByKey` not awaited** — silent failure; toast cookie may persist and re-appear on next navigation (`components/shared/redirect-toast/index.tsx:16–17`)
 
 ### Architecture
 - [ ] **Data-fetch functions marked as Server Actions** — `getCustomers`, `getCustomer`, `getDashboardStats` live in `"use server"` files making them POST-only endpoints; data fetching should use plain async functions (`features/customers/actions/index.ts`, `features/dashboard/actions/index.ts`)
