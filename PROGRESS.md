@@ -28,7 +28,7 @@
 
 ### Security
 - [x] **Session token logged to console** — `console.log` in `createSession` prints the raw cookie value; will leak tokens in production logs (`lib/auth/session.ts:38`)
-- [ ] **Arbitrary cookie write via Server Action** — `setCookieByKey(name, value)` accepts any cookie name from the client; a caller could overwrite the session cookie (`actions/cookies.actions.ts:5–8`)
+- [x] **Arbitrary cookie write via Server Action** — `setCookieByKey(name, value)` accepts any cookie name from the client; a caller could overwrite the session cookie (`actions/cookies.actions.ts:5–8`)
 
 ### Bugs
 - [ ] **`cursor-wait` class never applied** — `clsx({ pending: "cursor-wait" })` adds the class `"pending"` (always truthy string key), not `cursor-wait` (`components/shared/submit-button/index.tsx:48`)
