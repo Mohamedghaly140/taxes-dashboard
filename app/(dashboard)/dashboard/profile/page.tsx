@@ -18,8 +18,8 @@ export default async function ProfilePage() {
           <p className="font-medium">{user.email}</p>
         </div>
         <div>
-          <span className="text-muted-foreground">Role</span>
-          <p className="font-medium">{user.role}</p>
+          <span className="text-muted-foreground">Status</span>
+          <p className="font-medium">{user.status}</p>
         </div>
       </div>
     </div>

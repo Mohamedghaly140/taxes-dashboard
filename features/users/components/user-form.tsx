@@ -18,7 +18,7 @@ import {
   ActionState,
   EMPTY_ACTION_STATE,
 } from "@/components/shared/form/utils/to-action-state";
-import type { UserWithCount } from "./users-columns";
+import type { UserWithCount } from "../types";
 
 type UserFormProps = {
   action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;

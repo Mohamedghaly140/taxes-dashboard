@@ -1,20 +1,12 @@
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { validateRequest } from "@/lib/auth/session";
-
-async function getAdminUser() {
-  const { user } = await validateRequest();
-  if (!user) redirect("/login");
-  if (user.role !== "ADMIN") redirect("/dashboard");
-  return user;
-}
+import { requireAdmin } from "@/lib/auth/guards";
 
 export async function getUsers({
   search = "",
   page = 1,
   limit = 5,
 }: { search?: string; page?: number; limit?: number } = {}) {
-  await getAdminUser();
+  await requireAdmin();
 
   const where = search
     ? {

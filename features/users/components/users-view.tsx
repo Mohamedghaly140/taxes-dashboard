@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation";
-import { validateRequest } from "@/lib/auth/session";
+import { requireAdmin } from "@/lib/auth/guards";
 import { searchParamsCache } from "@/nuqs/search-params";
 import { getUsers } from "../queries";
 import { UsersTable } from "./users-table";
@@ -9,9 +8,7 @@ export async function UsersView({
 }: {
   searchParams: Promise<Record<string, string>>;
 }) {
-  const { user } = await validateRequest();
-  if (!user) redirect("/login");
-  if (user.role !== "ADMIN") redirect("/dashboard");
+  const user = await requireAdmin();
 
   const { search, page, limit } = await searchParamsCache.parse(searchParams);
   const { users, total, pageCount } = await getUsers({ search, page, limit });

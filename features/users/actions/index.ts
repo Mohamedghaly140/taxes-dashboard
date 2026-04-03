@@ -1,11 +1,9 @@
 "use server";
 
 import { hash } from "@node-rs/argon2";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { validateRequest } from "@/lib/auth/session";
-import { isLastAdmin } from "@/lib/auth/guards";
+import { requireAdmin, isLastAdmin } from "@/lib/auth/guards";
 import { createUserSchema, updateUserSchema } from "@/lib/validations/user.schema";
 import {
   ActionState,
@@ -20,20 +18,13 @@ const ARGON2_OPTIONS = {
   parallelism: 1,
 };
 
-async function getAdminUser() {
-  const { user } = await validateRequest();
-  if (!user) redirect("/login");
-  if (user.role !== "ADMIN") redirect("/dashboard");
-  return user;
-}
-
 export async function createUser(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
-  try {
-    await getAdminUser();
+  await requireAdmin();
 
+  try {
     const parsed = createUserSchema.safeParse(Object.fromEntries(formData));
     if (!parsed.success) return fromErrorToActionState(parsed.error, formData);
 
@@ -57,9 +48,9 @@ export async function updateUser(
   _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
-  try {
-    const admin = await getAdminUser();
+  const admin = await requireAdmin();
 
+  try {
     const id = formData.get("id");
     if (!id || typeof id !== "string") return toActionState("ERROR", "User not found");
 
@@ -107,9 +98,9 @@ export async function updateUser(
 }
 
 export async function deleteUser(id: string): Promise<ActionState> {
-  try {
-    const admin = await getAdminUser();
+  const admin = await requireAdmin();
 
+  try {
     if (id === admin.id) {
       return toActionState("ERROR", "Cannot delete your own account");
     }

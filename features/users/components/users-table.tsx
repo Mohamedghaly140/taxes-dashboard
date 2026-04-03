@@ -16,7 +16,7 @@ import { UsersDataTable } from "./users-data-table";
 import { UsersPagination } from "./users-pagination";
 import { createColumns } from "./users-columns";
 import { searchParser, paginationParser } from "@/nuqs/search-params";
-import type { UserWithCount } from "./users-columns";
+import type { UserWithCount } from "../types";
 
 type UsersTableProps = {
   users: UserWithCount[];

@@ -6,17 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
-import type { Role, Status } from "@/generated/prisma/client";
+import type { UserWithCount } from "../types";
 
-export type UserWithCount = {
-  id: string;
-  name: string;
-  email: string;
-  role: Role;
-  status: Status;
-  createdAt: Date;
-  _count: { customers: number };
-};
 
 export const createColumns = (
   currentUserId: string,

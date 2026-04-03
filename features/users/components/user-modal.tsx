@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { createUser, updateUser } from "../actions";
 import { UserForm } from "./user-form";
-import type { UserWithCount } from "./users-columns";
+import type { UserWithCount } from "../types";
 
 type UserModalProps = {
   open: boolean;

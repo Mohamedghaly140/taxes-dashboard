@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { UserWithCount } from "./users-columns";
+import type { UserWithCount } from "../types";
 
 type UsersDataTableProps = {
   table: TanstackTable<UserWithCount>;
