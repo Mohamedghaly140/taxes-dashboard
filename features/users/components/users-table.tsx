@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useQueryStates } from "nuqs";
 import {
@@ -37,18 +37,21 @@ export function UsersTable({ users, pageCount, total, currentUserId }: UsersTabl
     { shallow: false }
   );
 
-  function handleDelete(id: string) {
-    setDeletingId(id);
-    startTransition(async () => {
-      const result = await deleteUser(id);
-      if (result.status === "ERROR") {
-        toast.error(result.message || "Failed to delete user");
-      } else {
-        toast.success(result.message);
-      }
-      setDeletingId(null);
-    });
-  }
+  const handleDelete = useCallback(
+    (id: string) => {
+      setDeletingId(id);
+      startTransition(async () => {
+        const result = await deleteUser(id);
+        if (result.status === "ERROR") {
+          toast.error(result.message || "Failed to delete user");
+        } else {
+          toast.success(result.message);
+        }
+        setDeletingId(null);
+      });
+    },
+    [startTransition]
+  );
 
   const columns = useMemo(
     () =>
@@ -61,7 +64,7 @@ export function UsersTable({ users, pageCount, total, currentUserId }: UsersTabl
         handleDelete,
         deletingId
       ),
-    [deletingId, currentUserId]
+    [deletingId, currentUserId, handleDelete]
   );
 
   const table = useReactTable({
