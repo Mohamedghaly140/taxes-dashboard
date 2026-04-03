@@ -1,5 +1,5 @@
 import { searchParamsCache } from "@/nuqs/search-params";
-import { getCustomers } from "../actions";
+import { getCustomers } from "../queries";
 import { CustomersTable } from "./customers-table";
 
 export async function CustomersView({

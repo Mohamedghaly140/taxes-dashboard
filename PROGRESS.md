@@ -35,7 +35,7 @@
 - [x] **`deleteCookieByKey` not awaited** — silent failure; toast cookie may persist and re-appear on next navigation (`components/shared/redirect-toast/index.tsx:16–17`)
 
 ### Architecture
-- [ ] **Data-fetch functions marked as Server Actions** — `getCustomers`, `getCustomer`, `getDashboardStats` live in `"use server"` files making them POST-only endpoints; data fetching should use plain async functions (`features/customers/actions/index.ts`, `features/dashboard/actions/index.ts`)
+- [x] **Data-fetch functions marked as Server Actions** — `getCustomers`, `getCustomer`, `getDashboardStats` live in `"use server"` files making them POST-only endpoints; data fetching should use plain async functions (`features/customers/actions/index.ts`, `features/dashboard/actions/index.ts`)
 - [ ] **`createColumns` not memoized** — recreated on every render, causing `useReactTable` to re-initialize unnecessarily (`features/customers/components/customers-table.tsx:58–65`)
 - [ ] **Query logging unconditional** — `log: ["query"]` in `PrismaClient` runs in production; floods logs and may expose data (`lib/prisma.ts:17`)
 - [ ] **Sidebar active-link too strict** — `pathname === href` exact match means nested routes (e.g. `/dashboard/customers/abc`) don't highlight the parent nav item (`features/dashboard/components/sidebar.tsx:42`)

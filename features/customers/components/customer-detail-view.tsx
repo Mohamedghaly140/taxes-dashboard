@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getCustomer } from "../actions";
+import { getCustomer } from "../queries";
 import { CustomerDetail } from "./customer-detail";
 
 export async function CustomerDetailView({ id }: { id: string }) {

@@ -1,4 +1,4 @@
-import { getDashboardStats } from "../actions";
+import { getDashboardStats } from "../queries";
 import {
   LucideCalendar,
   LucideClock,

@@ -1,5 +1,3 @@
-"use server";
-
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { validateRequest } from "@/lib/auth/session";
