@@ -2,16 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LucideLayoutDashboard, LucideUsers, LucideSettings, LucideUser, LucideLogOut } from "lucide-react";
+import { LucideLayoutDashboard, LucideUsers, LucideSettings, LucideUser, LucideLogOut, LucideUserCog } from "lucide-react";
 import { useTransition } from "react";
 import { logout } from "@/features/auth/actions";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { User as LuciaUser } from "lucia";
 
-const navItems = [
+const baseNavItems = [
   { href: "/dashboard",           label: "Overview",   icon: LucideLayoutDashboard },
   { href: "/dashboard/customers", label: "Customers",  icon: LucideUsers },
+];
+
+const adminNavItems = [
+  { href: "/dashboard/users", label: "Users", icon: LucideUserCog },
+];
+
+const bottomNavItems = [
   { href: "/dashboard/settings",  label: "Settings",   icon: LucideSettings },
   { href: "/dashboard/profile",   label: "Profile",    icon: LucideUser },
 ];
@@ -19,6 +26,12 @@ const navItems = [
 export function Sidebar({ user }: { user: LuciaUser }) {
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
+
+  const navItems = [
+    ...baseNavItems,
+    ...(user.role === "ADMIN" ? adminNavItems : []),
+    ...bottomNavItems,
+  ];
 
   function handleLogout() {
     startTransition(() => logout());

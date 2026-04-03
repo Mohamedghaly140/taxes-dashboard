@@ -29,7 +29,7 @@ async function main() {
       name: "Alice Example",
       email: "alice@example.com",
       passwordHash,
-      role: Role.CLIENT,
+      role: Role.ADMIN,
       status: Status.ACTIVE,
     },
   });
@@ -39,8 +39,8 @@ async function main() {
       name: "Bob Example",
       email: "bob@example.com",
       passwordHash,
-      role: Role.ADMIN,
-      status: Status.INACTIVE,
+      role: Role.CLIENT,
+      status: Status.ACTIVE,
     },
   });
 

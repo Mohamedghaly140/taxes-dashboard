@@ -190,10 +190,25 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 
 ### C. UI/UX Design (Shadcn)
 
-- **Layout:** Sidebar navigation with "Customers," "Settings," and "Profile."
+- **Layout:** Sidebar navigation with "Customers," "Users" (ADMIN only), "Settings," and "Profile."
 - **Data Table:** Shadcn `DataTable` (TanStack Table) with filtering and sorting.
 - **Forms:** `react-hook-form` integrated with Zod resolvers.
 - **Feedback:** `sonner` toast notifications and loading skeletons.
+
+### D. User Management (Admin Only)
+
+Admins can manage all user accounts at `/dashboard/users`. The route is protected at two layers: the sidebar link is conditionally rendered (`user.role === "ADMIN"`), and the page/view server component redirects non-admins to `/dashboard`.
+
+**Actions (`features/users/actions/index.ts`):**
+- `createUser` — validates with `createUserSchema`, checks for email uniqueness, hashes password with Argon2.
+- `updateUser` — blank password preserves existing hash; non-blank rehashes. Guards: blocks self-edit, blocks demoting the last ADMIN.
+- `deleteUser` — guards: blocks self-delete, blocks deleting the last ADMIN.
+
+**Guards (`lib/auth/guards.ts`):**
+- `isLastAdmin(excludeId)` — returns `true` if no other ADMIN exists besides `excludeId`.
+
+**Table columns:** Name, Email, Role (Badge), Status (Badge), Created At, # of Customers, Actions.
+Actions column is hidden on the admin's own row (read-only self-row).
 
 ---
 
@@ -212,6 +227,9 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 │           ├── customers/
 │           │   ├── page.tsx          # → renders <CustomersView searchParams={…} /> from @/features/customers
 │           │   └── loading.tsx       # skeleton matching customers table
+│           ├── users/
+│           │   ├── page.tsx          # admin guard + renders <UsersView /> from @/features/users
+│           │   └── loading.tsx       # skeleton matching users table
 │           ├── profile/
 │           │   ├── page.tsx
 │           │   └── loading.tsx
@@ -237,6 +255,21 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 │   │   │   ├── customers-table.tsx
 │   │   │   └── customers-view.tsx    # smart server component — fetches + renders
 │   │   └── index.ts                  # barrel: export { CustomersView }
+│   ├── users/
+│   │   ├── actions/
+│   │   │   └── index.ts              # createUser, updateUser, deleteUser (ADMIN only)
+│   │   ├── queries/
+│   │   │   └── index.ts              # getUsers
+│   │   ├── components/
+│   │   │   ├── users-view.tsx        # smart server component — fetches + renders
+│   │   │   ├── users-table.tsx       # orchestrator
+│   │   │   ├── users-toolbar.tsx
+│   │   │   ├── users-data-table.tsx
+│   │   │   ├── users-pagination.tsx
+│   │   │   ├── users-columns.tsx     # defines UserWithCount type + column defs
+│   │   │   ├── user-modal.tsx
+│   │   │   └── user-form.tsx
+│   │   └── index.ts                  # barrel: export { UsersView }
 │   └── dashboard/
 │       ├── actions/
 │       │   └── index.ts              # getDashboardStats
@@ -291,6 +324,7 @@ Server Actions handle all mutation logic, providing end-to-end type safety with 
 | Component | Path |
 | --- | --- |
 | Alert Dialog | `components/ui/alert-dialog.tsx` |
+| Badge | `components/ui/badge.tsx` |
 | Button | `components/ui/button.tsx` |
 | Dialog | `components/ui/dialog.tsx` |
 | Input | `components/ui/input.tsx` |
@@ -461,3 +495,5 @@ Items identified during evaluation. Work through these in order.
 - [x] **M2 — `submit-button`:** Now used in all three forms (`login-form`, `register-form`, `customer-form`). Uses `useFormStatus()` internally so `isPending` no longer needs to be threaded down from `useActionState`.
 
 - [x] **M3 — Leftover action files:** `test.actions.ts` deleted (unused). `cookies.actions.ts` kept — imported by `redirect-toast`.
+
+- [x] **P7 — User Management (Admin):** Added `features/users/` with full CRUD. Sidebar shows "Users" link only for `ADMIN` role. Route `/dashboard/users` redirects non-admins. Guards: self-edit blocked, self-delete blocked, last-admin delete/demote blocked (`lib/auth/guards.ts`). Badge component installed for Role/Status display.
