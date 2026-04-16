@@ -1,9 +1,8 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { validateRequest } from "@/lib/auth/session";
+import { getAuthenticatedUser } from "@/lib/auth/session";
 import { customerSchema } from "@/lib/validations/customer.schema";
 import {
   ActionState,
@@ -11,12 +10,6 @@ import {
   toActionState,
 } from "@/components/shared/form/utils/to-action-state";
 import { Prisma } from "@/generated/prisma/client";
-
-async function getAuthenticatedUser() {
-  const { user } = await validateRequest();
-  if (!user) redirect("/login");
-  return user;
-}
 
 const DUPLICATE_MSG =
   "A customer with that file number, tax registration number, or national ID already exists";

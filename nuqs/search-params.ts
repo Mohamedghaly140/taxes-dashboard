@@ -10,19 +10,9 @@ export const searchParser = parseAsString.withDefault("").withOptions({
 });
 
 
-export const sortOptions = {
-  shallow: false,
-  clearOnDefault: true,
-};
-
 export const paginationParser = {
   page: parseAsInteger.withDefault(1),
   limit: parseAsInteger.withDefault(5),
-};
-
-export const paginationOptions = {
-  shallow: false,
-  clearOnDefault: true,
 };
 
 export const searchParamsCache = createSearchParamsCache({

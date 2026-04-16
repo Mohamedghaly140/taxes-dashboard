@@ -4,6 +4,7 @@ import { hash } from "@node-rs/argon2";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin, isLastAdmin } from "@/lib/auth/guards";
+import { ARGON2_OPTIONS } from "@/lib/auth/constants";
 import { createUserSchema, updateUserSchema, updateProfileSchema } from "@/lib/validations/user.schema";
 import { validateRequest } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
@@ -12,13 +13,6 @@ import {
   fromErrorToActionState,
   toActionState,
 } from "@/components/shared/form/utils/to-action-state";
-
-const ARGON2_OPTIONS = {
-  memoryCost: 19456,
-  timeCost: 2,
-  outputLen: 32,
-  parallelism: 1,
-};
 
 export async function createUser(
   _prevState: ActionState,

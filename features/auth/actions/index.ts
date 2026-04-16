@@ -4,19 +4,13 @@ import { hash, verify } from "@node-rs/argon2";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createSession, invalidateSession, validateRequest } from "@/lib/auth/session";
+import { ARGON2_OPTIONS } from "@/lib/auth/constants";
 import { registerSchema, loginSchema } from "@/lib/validations/auth.schema";
 import {
   ActionState,
   fromErrorToActionState,
   toActionState,
 } from "@/components/shared/form/utils/to-action-state";
-
-const ARGON2_OPTIONS = {
-  memoryCost: 19456,
-  timeCost: 2,
-  outputLen: 32,
-  parallelism: 1,
-};
 
 export async function register(
   _prevState: ActionState,

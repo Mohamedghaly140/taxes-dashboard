@@ -1,12 +1,5 @@
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { validateRequest } from "@/lib/auth/session";
-
-async function getAuthenticatedUser() {
-  const { user } = await validateRequest();
-  if (!user) redirect("/login");
-  return user;
-}
+import { getAuthenticatedUser } from "@/lib/auth/session";
 
 export async function getDashboardStats() {
   const user = await getAuthenticatedUser();

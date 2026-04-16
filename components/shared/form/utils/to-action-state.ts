@@ -1,4 +1,3 @@
-// import { AxiosError } from "axios";
 import { ZodError } from "zod";
 
 export type ActionState = {
@@ -34,16 +33,6 @@ export const fromErrorToActionState = (
       response,
     };
   }
-  // if (error instanceof AxiosError) {
-  //   return {
-  //     status: "ERROR",
-  //     message: error.response?.data.message,
-  //     fieldErrors: {},
-  //     payload: toPayload(formData),
-  //     timestamp: Date.now(),
-  //     response,
-  //   };
-  // }
   if (error instanceof Error) {
     return {
       status: "ERROR",

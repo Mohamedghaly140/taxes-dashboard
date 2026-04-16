@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { cache } from "react";
+import { redirect } from "next/navigation";
 import { lucia } from "./lucia";
 import type { Session, User } from "lucia";
 
@@ -30,6 +31,12 @@ export const validateRequest = cache(async (): Promise<ValidateRequestResult> =>
 
   return result;
 });
+
+export async function getAuthenticatedUser() {
+  const { user } = await validateRequest();
+  if (!user) redirect("/login");
+  return user;
+}
 
 export async function createSession(userId: string) {
   const session = await lucia.createSession(userId, {});
