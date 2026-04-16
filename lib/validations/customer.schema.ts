@@ -8,7 +8,7 @@ export const customerSchema = z.object({
   portalPassword: z.string().min(1, "Portal password is required"),
   fileNumber: z.string().min(1, "File number is required"),
   taxRegistrationNumber: z.string().regex(/^\d{3}-\d{3}-\d{3}$/, "Must be in format 000-000-000"),
-  nationalId: z.string().length(14, "Must be 14 digits"),
+  nationalId: z.string().regex(/^\d{14}$/, "Must be exactly 14 digits"),
 });
 
 export type CustomerFormValues = z.infer<typeof customerSchema>;
