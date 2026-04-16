@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useQueryStates } from "nuqs";
@@ -42,18 +42,21 @@ export function CustomersTable({
     { shallow: false },
   );
 
-  function handleDelete(id: string) {
-    setDeletingId(id);
-    startTransition(async () => {
-      const result = await deleteCustomer(id);
-      if (result.status === "ERROR") {
-        toast.error(result.message || "Failed to delete customer");
-      } else {
-        toast.success(result.message);
-      }
-      setDeletingId(null);
-    });
-  }
+  const handleDelete = useCallback(
+    (id: string) => {
+      setDeletingId(id);
+      startTransition(async () => {
+        const result = await deleteCustomer(id);
+        if (result.status === "ERROR") {
+          toast.error(result.message || "Failed to delete customer");
+        } else {
+          toast.success(result.message);
+        }
+        setDeletingId(null);
+      });
+    },
+    [startTransition],
+  );
 
   const columns = useMemo(
     () => createColumns(
@@ -64,7 +67,7 @@ export function CustomersTable({
       handleDelete,
       deletingId,
     ),
-    [deletingId],
+    [deletingId, handleDelete],
   );
 
   const table = useReactTable({
