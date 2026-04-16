@@ -58,9 +58,9 @@ model Customer {
   emailPassword         String
   username              String
   portalPassword        String
-  fileNumber            String  @unique
-  taxRegistrationNumber String  @unique
-  nationalId            String  @unique
+  fileNumber            String
+  taxRegistrationNumber String
+  nationalId            String
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -69,4 +69,7 @@ model Customer {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+  @@unique([userId, fileNumber])
+  @@unique([userId, taxRegistrationNumber])
+  @@unique([userId, nationalId])
 }
