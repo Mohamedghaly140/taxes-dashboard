@@ -74,16 +74,19 @@ export async function login(
       ARGON2_OPTIONS,
     );
 
-    if (!user || !validPassword) {
-      return toActionState("ERROR", "Invalid email or password", formData);
-    }
-
-    if (user.status === "INACTIVE") {
+    // Check inactive status before revealing whether credentials are correct.
+    // This way an inactive user with a wrong password still gets the helpful
+    // "inactive" message, not a confusing "invalid credentials" one.
+    if (user?.status === "INACTIVE") {
       return toActionState(
         "ERROR",
         "Your account is inactive. Please contact support for assistance.",
         formData
       );
+    }
+
+    if (!user || !validPassword) {
+      return toActionState("ERROR", "Invalid email or password", formData);
     }
 
     await createSession(user.id);
