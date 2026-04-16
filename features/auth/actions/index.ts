@@ -63,12 +63,18 @@ export async function login(
     const { email, password } = parsed.data;
 
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      return toActionState("ERROR", "Invalid email or password", formData);
-    }
 
-    const validPassword = await verify(user.passwordHash, password, ARGON2_OPTIONS);
-    if (!validPassword) {
+    // Always run verify() — even when the user doesn't exist — so response
+    // timing is constant and doesn't reveal whether an email is registered.
+    const DUMMY_HASH =
+      "$argon2id$v=19$m=19456,t=2,p=1$dummysaltdummysalt$dummyhashoutputdummyhashoutput";
+    const validPassword = await verify(
+      user?.passwordHash ?? DUMMY_HASH,
+      password,
+      ARGON2_OPTIONS,
+    );
+
+    if (!user || !validPassword) {
       return toActionState("ERROR", "Invalid email or password", formData);
     }
 
