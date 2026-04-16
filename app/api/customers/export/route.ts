@@ -24,11 +24,15 @@ export async function GET() {
     "Updated At",
   ];
 
+  const FORMULA_CHARS = /^[=+\-@\t\r]/;
+
   function escapeCell(value: string): string {
-    if (value.includes(",") || value.includes('"') || value.includes("\n")) {
-      return `"${value.replace(/"/g, '""')}"`;
+    // Prefix formula-starting values to prevent CSV injection in spreadsheet apps
+    const safe = FORMULA_CHARS.test(value) ? `'${value}` : value;
+    if (safe.includes(",") || safe.includes('"') || safe.includes("\n")) {
+      return `"${safe.replace(/"/g, '""')}"`;
     }
-    return value;
+    return safe;
   }
 
   const rows = customers.map((c) =>
