@@ -1,15 +1,13 @@
+import { hash } from "@node-rs/argon2";
 import { Role, Status } from "@/generated/prisma/enums";
+import { ARGON2_OPTIONS } from "@/lib/auth/constants";
 import { prisma } from "@/lib/prisma";
 
-/** Dev-only password for seeded accounts (Argon2id via Bun). */
+/** Dev-only password for seeded accounts (Argon2id, same options as auth). */
 const SEED_PASSWORD = "password123";
 
 async function hashPassword(plain: string): Promise<string> {
-  return Bun.password.hash(plain, {
-    algorithm: "argon2id",
-    memoryCost: 19456,
-    timeCost: 2,
-  });
+  return hash(plain, ARGON2_OPTIONS);
 }
 
 async function main() {
