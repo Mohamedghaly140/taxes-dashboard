@@ -61,7 +61,7 @@ export async function login(
     // Always run verify() — even when the user doesn't exist — so response
     // timing is constant and doesn't reveal whether an email is registered.
     const DUMMY_HASH =
-      "$argon2id$v=19$m=19456,t=2,p=1$dummysaltdummysalt$dummyhashoutputdummyhashoutput";
+      "$argon2id$v=19$m=19456,t=2,p=1$7YaTDnak5Mtcy0elW5v2tg$DItoYuKxNargz21Sq55gWmQ91DrCizO34IbTUs8Wa/Y";
     const validPassword = await verify(
       user?.passwordHash ?? DUMMY_HASH,
       password,
